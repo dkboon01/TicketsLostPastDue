@@ -1,17 +1,66 @@
-﻿@{
-    ViewBag.Title = "Contact";
+﻿@*@Model  TicketsLostPastDue.Models.APITicket*@
+  
+@{
+    ViewBag.Title = "Ticket Details";
 }
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
+<style type="text/css">
+    
+    </style>
+<div>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
 
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+@using (Html.BeginForm("DtlTicket", "Home", FormMethod.Post, new { TicketNo = Model }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <div class="editor-label">
+
+           <div class="row col-xs-3 col-md-3">
+            <label >Ticket Number:</label>
+               @Model.TicketNumber
+               </div>
+            <div class="row col-xs-3 col-md-3">
+                <label>Site Number:</label>
+                @Model.Site.SiteNumber
+            </div>
+            <div class="row col-xs-3 col-md-3">
+                <label>Customer Number:</label>
+                @Model.CustomerNumber
+                </div>
+            <div class="row col-xs-3 col-md-3">
+                <label>Site Name:</label>
+                @Model.SiteName
+                </div>
+            <div class="row col-xs-3 col-md-3">
+                <label>Address:</label>
+                @Model.Site.Address1.Trim()  @Model.Site.City.Trim() , @Model.Site.State   @Model.Site.Zip
+                </div>
+            <div class="row col-xs-3 col-md-3">
+                <label>System:</label>
+                @Model.System.SystemCode
+                </div>
+            <div class="row col-xs-3 col-md-3">
+                <label>Route:</label>
+                @Model.RouteCode
+                </div>
+            <div class="row col-xs-3 col-md-3">
+                <label>Quantity:</label>
+                @Model.System.AlarmAccount
+                </div>
+                <div class="row col-xs-3 col-md-3">
+                    <label>Technician</label>
+                    @Model.ServiceTechCode
+                </div>
+
+        </div>
+
+
+
+    </fieldset>
+}
+
+</div>
