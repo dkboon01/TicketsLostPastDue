@@ -1,7 +1,7 @@
 ﻿@*@Model  TicketsLostPastDue.Models.APITicket*@
   
 @{
-    ViewBag.Title = "Ticket Details";
+    ViewBag.Title = "Ticket Details - OOB";
 }
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
@@ -26,19 +26,19 @@
     </style>
 
 <div class="container">
+    @Html.Partial("TicketDetailWithInspection")
 
-
-@using (Html.BeginForm("Lost", "Home", FormMethod.Post, new { TicketNo = Model }))
+@using (Html.BeginForm("OOB", "Home", FormMethod.Post, new { TicketNo = Model }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
-    <fieldset>
+    @*<fieldset>
         <div class="editor-label">
 
            <div class="row col-xs-3 col-md-3">
             <label >Ticket Number:</label>
-               @Model.TicketNumber
+               @Model.apit.TicketNumber
                </div>
             <div class="row col-xs-3 col-md-3">
                 <label>Site Number:</label>
@@ -76,15 +76,18 @@
             
                 @Model.CustomerSiteId
             </div>
+            <table id="InspectionDtl">
+
+                <tr>
+                    <td></td>
+                </tr>
+            </table>
 
         </div>
         <hr />
-        <div class="col-md-12 col-xs-12">
-        <input type="submit" name="Lost" value="Lost" />
-        <input type="submit" name="OOB" value="OOB" />
-        </div>
 
-    </fieldset>
+
+    </fieldset>*@
    
 }
     @*<div class="col-md-12 col-xs-12">

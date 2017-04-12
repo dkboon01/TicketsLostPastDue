@@ -29,6 +29,7 @@ namespace TicketsLostPastDue.Models
         public System System { get; set; }
         public string RouteCode { get; set; }
         public string ServiceTechCode { get; set; }
+        public int ServiceCompanyID { get; set; }
 
     }
     public class Note
@@ -84,6 +85,10 @@ namespace TicketsLostPastDue.Models
         public bool PORequired { get; set; }
 
     }
+   // public class Inspections
+   // {
+   //    public List<SearchInspections> SearchInspections { get; set; }
+   //}
     //public class Customer
     //{
     //    /// <summary>

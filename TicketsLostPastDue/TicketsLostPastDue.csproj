@@ -153,7 +153,9 @@
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\CustomerBill.cs" />
     <Compile Include="Models\CustomerSite.cs" />
+    <Compile Include="Models\SearchInspection.cs" />
     <Compile Include="Models\Ticket.cs" />
+    <Compile Include="Models\ViewModelTicketDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -207,6 +209,11 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\OOB.cshtml" />
+    <Content Include="Views\Home\Refused.cshtml" />
+    <Content Include="Views\Home\Lost.cshtml" />
+    <Content Include="Views\Home\Done.cshtml" />
+    <Content Include="Views\Shared\TicketDetailWithInspection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

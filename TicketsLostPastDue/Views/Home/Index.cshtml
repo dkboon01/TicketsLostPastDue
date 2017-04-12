@@ -1,6 +1,6 @@
 ﻿@model  TicketsLostPastDue.Models.Ticket
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Enter Ticket";
 }
 
 @*<div class="jumbotron">
@@ -30,28 +30,40 @@
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
 </div>*@
-<h2>Enter a Ticket Number To Proces</h2>
+<h2>Enter a Ticket Number then press the Action button</h2>
 <div class="row">
-    @using (Html.BeginForm("FindTicket", "Home", FormMethod.Post, new {TicketNo = Model}))
-    {
+  @using (Html.BeginForm("FindTicket", "Home", FormMethod.Post, new { TicketNo = Model }))
+  {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
-    
+
         <fieldset>
             <div class="editor-label">
                 @Html.LabelFor(model => model.TicketNumber)
+                @Html.ValidationMessage("Unsuccessful", "*")
             </div>
             <div class="editor-label">
                 @Html.TextBoxFor(model => model.TicketNumber)
 
             </div>
-            <input type="submit" value="FindTicket" />
-            
+            <input type="submit" name="LostButton" value="Lost" />
+            <input type="submit" name="OOBButton" value="OOB" />
+            <input type="submit" name="RefusedButton" value="Refused" />
+            <input type="submit" name="DoneButton" value="Done" />
         </fieldset>
     }
-    @*<form id="sbmticket"> 
-    <label for="ticketid"></label>
-    <input type="text" id="ticketid" />
-        <button id="btnsubmit" type="submit" </button>
-        </form>*@
+    
+  @*  @using (Html.BeginForm("Details", "YourControllerName"))
+    {
+        <input type="hidden" name="EmployeeId" value="@item.EmployeeId" />
+        <input type="submit" value="Details" />
+    } 
+    @*<form id="sbmti
+            </fieldset>
+        }
+        @*<form id="sbmticket">
+        <label for="ticketid"></label>
+        <input type="text" id="ticketid" />
+            <button id="btnsubmit" type="submit" </button>
+            </form>*@
 </div>
