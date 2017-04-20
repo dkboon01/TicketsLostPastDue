@@ -13,6 +13,7 @@ namespace TicketsLostPastDue.Models
         public int ServiceTicketId { get; set; }
         public string TicketStatus { get; set; }
         public string TicketStatusName { get; set; }
+        [Display(Name = "Ticket Number")]
         public string TicketNumber { get; set; }
         public int CustomerId { get; set; }
         public string CustomerNumber { get; set; }
@@ -21,16 +22,59 @@ namespace TicketsLostPastDue.Models
         public string City { get; set; }
         public string State { get; set; }
         public string CustomerSiteAddress { get; set; }
-        public List<Note> Notes { get; set;  }
+        public string CustomerSystemId { get; set; }
+        public string AlarmAccount { get; set; }
+        public string SystemCode { get; set; }
+        public string MultipleSystems { get; set; }
+        public string CreationDate { get; set; }
+        public string RequestedBy { get; set; }
+        public string RequestedByPhone { get; set; }
+        public string RequestedByPhoneExt { get; set; }
+        public string AutoNotify { get; set; }
+        public string ProblemCode { get; set; }
+        public string SubProblemCode { get; set; }
+        public string ScheduledFor { get; set; }
+        public string ServiceTechCode { get; set; }
+        public int EstimatedLength { get; set; }
+        public string ResolutionCode { get; set; }
+        public bool Billable { get; set; }
+        public bool Billed { get; set; }
+        public decimal EquipmentCharge { get; set; }
+        public decimal LaborCharge { get; set; }
+        public decimal OtherCharge { get; set; }
+        public decimal TaxTotal { get; set;  }
+        public decimal RegularHours { get; set; }
+        public decimal OvertimeHours { get; set; }
+        public decimal HolidayHours { get; set; }
+        public decimal TripCharge { get; set; }
+        public int InvoiceNumber { get; set; }
+        public decimal RegularRate { get; set; }
+        public decimal OvertimeRate { get; set; }
+        public decimal HolidayRate { get; set; }
+
+        public string CustomerComments { get; set; }
+        public List<Note> Notes { get; set; }
         public List<Part> Parts { get; set; }
         public Customer Customer { get; set; }
         public CustomerSite Site { get; set; }
         // public List<Customer> customer { get; set; }
-        public System System { get; set; }
+        public SdSystem System { get; set; }
         public string RouteCode { get; set; }
-        public string ServiceTechCode { get; set; }
         public int ServiceCompanyID { get; set; }
+        public Competitors comp { get; set; }
+        public string ServiceCompanyCode { get; set; }
+        public bool IsInspection { get; set; }
+        public string UserCode { get; set; }
+        public string EnteredBy { get; set; }
+        public string CategoryCode { get; set; }
+        public string PONumber { get; set; }
+        public string ServiceLevelCode {get; set; }
+        public string Priority { get; set; }
+        public int InspectionId { get; set; }
 
+        public int ExpertiseLevel { get; set; }
+        public string Signer { get; set; }
+        public int CustomerContactId { get; set; }
     }
     public class Note
     {
@@ -48,7 +92,7 @@ namespace TicketsLostPastDue.Models
     {
         public string partno { get; set; }
     }
-    public class System
+    public class SdSystem
     {
         public int CustomerSystemId { get; set; }
         public int CSCustomerSystemId { get; set; }

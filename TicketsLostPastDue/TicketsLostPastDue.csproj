@@ -153,6 +153,7 @@
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\CustomerBill.cs" />
     <Compile Include="Models\CustomerSite.cs" />
+    <Compile Include="Models\Competitor.cs" />
     <Compile Include="Models\SearchInspection.cs" />
     <Compile Include="Models\Ticket.cs" />
     <Compile Include="Models\ViewModelTicketDetail.cs" />

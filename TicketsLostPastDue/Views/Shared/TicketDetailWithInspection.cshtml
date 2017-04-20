@@ -1,10 +1,10 @@
 ﻿@model TicketsLostPastDue.Models.ViewModelTicketDetail
+   
 
 <div>
     <h4>Ticket Detail and Additional Inspections</h4>
-    <hr />
-    <dl class="dl-horizontal">
-    </dl>
+  
+   
 
 
     <fieldset>
@@ -13,10 +13,11 @@
                <table class="col-md-12 col-xs-12">
                    <tr>
                        <td >
-                     <label class=" control-label" for="ticketnumber">Ticket Number: </label>
-                     <input id="ticketnumber" readonly value="@Model.apit.TicketNumber" />
-                       
-                </td>
+                     <label class=" control-label col-md-3 col-xs-3" for="ticketnumber">Ticket Number: </label>
+                     <input class="col-md-3 col-xs-3" id="ticketnumber" readonly value="@Model.apit.TicketNumber" />
+                    @*//       @Html.LabelFor(m => m.apit.TicketNumber);
+                       @Html.DisplayFor(m => m.apit.TicketNumber);*@
+                      </td>
               
             
                        <td>
@@ -28,100 +29,50 @@
                            <input class="col-md-3 col-xs-3" id="customernumber" readonly value="@Model.apit.CustomerNumber" />
                        </td>
                </tr>
-                   @*<div class="form-group">
-                       <label class="control-label col-xs-3 col-md-3" for="rsgnprospemailretired">Email</label>
-                       <div class="col-xs-3 col-md-3">
-                           <input id="rsgnprospemailretired" type="email" readonly name="rsgnprospemailretired" />
-                       </div>
-                   </div>*@
-           <tr>
-               <td>
-                <label class="control-label" for="sitename">Site Name:</label>
-               <input id="sitename" readonly value="@Model.apit.SiteName" />
-            </td>
-            <td>
-                <label class="control-label" for="address">Address:</label>
-              <input id="address" readonly style="width:500px" value=" @Model.apit.Site.Address1.Trim()  @Model.apit.Site.City.Trim() , @Model.apit.Site.State   @Model.apit.Site.Zip"/>
-            </td>
-            </tr>
+                  
+               <tr>
+                       <td>
+                           <label class="control-label  col-md-3 col-xs-3" for="sitename">Site Name:</label>
+                            <input class=" col-md-3 col-xs-3"id="sitename" readonly value="@Model.apit.SiteName" />
+                        </td>
+                       <td>
+                               <label class="control-label  col-md-3 col-xs-3" for="address">Address:</label>
+                               <input class="col-md-9 col-xs-9" id="address" readonly style="width:500px" value=" @Model.apit.Site.Address1.Trim()  @Model.apit.Site.City.Trim() , @Model.apit.Site.State   @Model.apit.Site.Zip"/>
+                       </td>
+               </tr>
+                  <tr>
+                       <td>
+                           <label class="control-label  col-md-3 col-xs-3" for="system">System:</label>
+                           <input id="system" class=" col-md-3 col-xs-3" readonly value="@Model.apit.System" />  
+                       </td>
+                       <td>
+                           <label class="control-label col-md-3 col-xs-3" for="routecode">Route:</label>
+                           <input id="routecode" class="col-md-3 col-xs-3" readonly value="@Model.apit.RouteCode" />
+                       </td>
+                       <td>
+                           <label class="control-label col-md-3 col-xs-3" for="quantity">Quantity:</label>
+                           <input id="quantitiy" class="col-md-3 col-xs-3" readonly value="@Model.apit.System.AlarmAccount" />
+                       </td>
+                   </tr>
+                   <tr>
+                       <td>
+                           <label class="control-label col-md-3 col-xs-3" for="technician">Technician</label>
+                          <input id="technician" class="col-md-3 col-xs-3" readonly value="@Model.apit.ServiceTechCode" />
+                           
+                       </td>
+                   </tr>
             </table>
-            <div class="row col-xs-4 col-md-4">
-                <label>System:</label>
-                @Model.apit.System.SystemCode
-            </div>
-            <div class="row col-xs-4 col-md-4">
-                <label>Route:</label>
-                @Model.apit.RouteCode
-            </div>
-            <div class="row col-xs-4 col-md-4">
-                <label>Quantity:</label>
-                @Model.apit.System.AlarmAccount
-            </div>
-            <div class="row col-xs-4 col-md-4">
-                <label>Technician</label>
-                @Model.apit.ServiceTechCode
-            </div>
+       
+          
             <div class="row col-xs-4 col-md-4" style="display: none">
 
                 @Model.apit.CustomerSiteId
             
             </div>
-                </div>
-            <div id="inspectiondtl">
-              
-                        <table id="InspectionDtl">
-                            <thead>
-                                <tr>
-                                    <th class="col-md-3 col-xs-3">Cycle</th>
-                                    <th class="col-md-3 col-xs-3">System</th>
-                                    <th class="col-md-3 col-xs-3">Next Inspection</th>
-                                    <th class="col-md-3 col-xs-3">Last Inspection</th>
-                                </tr>
-                            </thead>
-                            @foreach (var m in (Model.sysinsp))
-                            {
-                            <tr>
-                                <td>
-                                    
-                                    <div class="col-md-3 col-xs-3">
-                                        <input id="inspcycldesc" readonly value="@m.inspcycldesc" />
-                                        
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <div class="col-md-3 col-xs-3">
-                                        <input id="syscode" readonly value="@m.syscode" />
-
-                                    </div>
-                                </td>
-                                <td>
-
-                                    <div class="col-md-3 col-xs-3">
-                                        <input id="nextinpdate" readonly value="@m.nextinpdate" />
-
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <div class="col-md-3 col-xs-3">
-                                        <input id="lastinpdate" readonly value="@m.lastinpdate" />
-
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="col-md-3 col-xs-3">
-                                        <input id="inspectionid" hidden value="@m.inspectionid" />
-
-                                    </div>
-                                </td>
-                            </tr>
-                            }
-            </table>
-          
-                </div>
+          </div>
+            
         </div>
-        <hr />
+    
 
 
     </fieldset>

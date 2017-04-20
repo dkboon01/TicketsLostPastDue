@@ -1,7 +1,7 @@
-﻿@*@Model  TicketsLostPastDue.Models.APITicket*@
-  
+﻿@model TicketsLostPastDue.Models.ViewModelTicketDetail
+
 @{
-    ViewBag.Title = "Ticket Details - Lost";
+    ViewBag.Title = "Lost";
 }
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
@@ -26,66 +26,88 @@
     </style>
 
 <div class="container">
-    @Html.Partial("TicketDetailWithInspection")
+   
 
-@using (Html.BeginForm("Lost", "Home", FormMethod.Post, new { TicketNo = Model }))
+@using (Html.BeginForm("Lost", "Home", FormMethod.Post , new{ APITicketViewModelTicketDetail = Model}))
+
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
+    <div>
+        @Html.Partial("TicketDetailWithInspection")
+        <div id="inspectiondtl">
 
-    @*<fieldset>
-        <div class="editor-label">
+            @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
+            <p>Mark the inspections you want to include in the process</p>
+            <table id="InspectionDtl">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="col-md-3 col-xs-3">Cycle</th>
+                        <th class="col-md-3 col-xs-3">System</th>
+                        <th class="col-md-3 col-xs-3">Next Inspection</th>
+                        <th class="col-md-3 col-xs-3">Last Inspection</th>
+                    </tr>
+                </thead>
 
-           <div class="row col-xs-3 col-md-3">
-            <label >Ticket Number:</label>
-               @Model.TicketNumber
-               </div>
-            <div class="row col-xs-3 col-md-3">
-                <label>Site Number:</label>
-                @Model.Site.SiteNumber
-            </div>
-            <div class="row col-xs-3 col-md-3">
-                <label>Customer Number:</label>
-                @Model.CustomerNumber
-                </div>
-            <div class="row col-xs-3 col-md-3">
-                <label>Site Name:</label>
-                @Model.SiteName
-                </div>
-            <div class="row col-xs-3 col-md-3">
-                <label>Address:</label>
-                @Model.Site.Address1.Trim()  @Model.Site.City.Trim() , @Model.Site.State   @Model.Site.Zip
-                </div>
-            <div class="row col-xs-3 col-md-3">
-                <label>System:</label>
-                @Model.System.SystemCode
-                </div>
-            <div class="row col-xs-3 col-md-3">
-                <label>Route:</label>
-                @Model.RouteCode
-                </div>
-            <div class="row col-xs-3 col-md-3">
-                <label>Quantity:</label>
-                @Model.System.AlarmAccount
-                </div>
-                <div class="row col-xs-3 col-md-3">
-                    <label>Technician</label>
-                    @Model.ServiceTechCode
-                </div>
-            <div class="row col-xs-3 col-md-3" style="display: none">
-            
-                @Model.CustomerSiteId
-            </div>
+
+                @for (var i = 0; i < Model.sysinsp.Count(); i++)
+                {
+
+
+                    <tr>
+                        <td>
+                           @Html.HiddenFor(m => m.sysinsp[i].inspectionid)
+                             @Html.HiddenFor(m => m.sysinsp[i].syscode)
+                            @Html.HiddenFor(m => m.sysinsp[i].nextinpdate)
+                            @Html.HiddenFor(m => m.sysinsp[i].lastinpdate)
+                            @Html.CheckBoxFor(m => m.sysinsp[i].IsSelected)
+                                              
+                            @Html.DisplayFor(m => m.sysinsp[i].inspectionid)
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => m.sysinsp[i].inspcycldesc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => m.sysinsp[i].syscode)
+                        
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => m.sysinsp[i].nextinpdate)
+                        </td>
+                         <td>
+                              @Html.DisplayFor(m => m.sysinsp[i].lastinpdate)
+                         </td>
+                    </tr>
+                }
+
+            </table>
 
         </div>
-        <hr />
+
+        <br />
+        <br />
+  
+        <p>inspections</p>
+        @Html.EditorFor(model => model.sysinsp)
+        <p> ticket</p>
+        @Html.EditorFor(model => model.apit)
+        <p>competitor list</p>
+        @Html.EditorFor(model => model.competitorslist)
+      
+
+        @*@Html.EditorFor(model => model.IsEnabled);*@
+        @*@Html.HiddenFor(model => model.sysinsp.inspectionid);*@
 
 
-    </fieldset>*@
-   
+        <label>Select the competitor that we lost the inspection to:</label>
+         @Html.DropDownListFor(m => m.Selectedcompetitor, new SelectList(Model.competitorslist, "Userdef_8_ID", "Userdef_8_Code",0), "Please select a competitor")
+        <p>selected competitor</p>
+        @Html.EditorFor(model => model.Selectedcompetitor);
+
+        <input type="submit" value="Submit"/>
+    </div>
 }
-    @*<div class="col-md-12 col-xs-12">
-        @Html.ActionLink("LOST", "LOST", new { APITicket = Model })
-        @Html.ActionLink("OOB", "OOB", new { APITicket = Model })
-    </div>*@
+
 </div>
