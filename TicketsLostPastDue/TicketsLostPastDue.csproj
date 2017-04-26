@@ -215,6 +215,8 @@
     <Content Include="Views\Home\Lost.cshtml" />
     <Content Include="Views\Home\Done.cshtml" />
     <Content Include="Views\Shared\TicketDetailWithInspection.cshtml" />
+    <Content Include="Views\Home\SuccessPage.cshtml" />
+    <Content Include="Views\Home\FailedPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

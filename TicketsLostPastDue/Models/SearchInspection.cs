@@ -15,6 +15,7 @@ namespace TicketsLostPastDue.Models
             public string lastinpdate { get; set; }
             public int inspectionid { get; set; }
             public bool IsSelected { get; set; }
+            public int customer_system_id { get; set; }
         
     }
    

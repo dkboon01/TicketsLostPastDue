@@ -13,9 +13,9 @@ namespace TicketsLostPastDue.Models
         public List<Competitors> competitorslist { get; set;  }
      //   public SelectList competitor { get; set; }
         public string Selectedcompetitor { get; set; }
-  
+        public string competitorothertxt { get; set; }
         //public bool[] Selected { get; set; }
-       // public string SelectedDescription { get; set; }
+        // public string SelectedDescription { get; set; }
 
     }
 }

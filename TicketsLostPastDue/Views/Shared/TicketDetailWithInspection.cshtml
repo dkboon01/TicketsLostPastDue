@@ -1,66 +1,72 @@
 ﻿@model TicketsLostPastDue.Models.ViewModelTicketDetail
    
-
-<div>
-    <h4>Ticket Detail and Additional Inspections</h4>
+<style>
+    .ticketdtl {
+        -moz-box-shadow: 0 0 2px black;
+        -webkit-box-shadow: 0 0 2px black;
+    } 
+</style>
+<h4>Ticket Detail and Additional Inspections</h4>
+<div class="ticketdtl">
+  
   
    
 
 
     <fieldset>
         <div class="editor-label">
-            <div class="col-md-12 col-xs-12">
+            <div class="col-md-12 col-xs-12 form-group">
                <table class="col-md-12 col-xs-12">
                    <tr>
-                       <td >
-                     <label class=" control-label col-md-3 col-xs-3" for="ticketnumber">Ticket Number: </label>
-                     <input class="col-md-3 col-xs-3" id="ticketnumber" readonly value="@Model.apit.TicketNumber" />
+                       <td class="form_group" >
+                     <label   class="col-md-3 col-xs-3" for="ticketnumber">Ticket: </label>
+                     <input  class="col-md-3 col-xs-3" id="ticketnumber" readonly value="@Model.apit.TicketNumber" />
                     @*//       @Html.LabelFor(m => m.apit.TicketNumber);
                        @Html.DisplayFor(m => m.apit.TicketNumber);*@
                       </td>
               
             
-                       <td>
-                           <label class="control-label col-md-3 col-xs-3" for="sitenumber">Site Number:</label>
-                           <input class="col-md-3 col-xs-3" id="sitenumber" readonly value="@Model.apit.Site.SiteNumber" />
+                       <td class="form-group">
+                           <label  class="col-md-3 col-xs-3" for="sitenumber">Site:</label>
+                           <input  class="col-md-3 col-xs-3" id="sitenumber" maxlength="10" readonly value="@Model.apit.Site.SiteNumber" />
                        </td>
-                       <td>
-                           <label class="control-label col-md-3 col-xs-3" for="customernumber">Customer Number:</label>
-                           <input class="col-md-3 col-xs-3" id="customernumber" readonly value="@Model.apit.CustomerNumber" />
+                       <td class="form-group">
+                           <label  class="col-md-3 col-xs-3" for="customernumber">Customer:</label>
+                           <input type="text" class="col-md-3 col-xs-3"  id="customernumber" readonly value="@Model.apit.CustomerNumber" />
                        </td>
                </tr>
                   
                <tr>
-                       <td>
-                           <label class="control-label  col-md-3 col-xs-3" for="sitename">Site Name:</label>
-                            <input class=" col-md-3 col-xs-3"id="sitename" readonly value="@Model.apit.SiteName" />
+                       <td class="form-group">
+                           <label  class="col-md-2 col-xs-2" for="sitename">Site:</label>
+                            <input  class="col-md-10 col-xs-10"  id="sitename" readonly value="@Model.apit.SiteName" />
                         </td>
-                       <td>
-                               <label class="control-label  col-md-3 col-xs-3" for="address">Address:</label>
-                               <input class="col-md-9 col-xs-9" id="address" readonly style="width:500px" value=" @Model.apit.Site.Address1.Trim()  @Model.apit.Site.City.Trim() , @Model.apit.Site.State   @Model.apit.Site.Zip"/>
+                       <td class="form-group">
+                               <label class="col-md-2 col-xs-2"  for="address">Addr:</label>
+                               <input  type="text" class="col-md-10 col-xs-10"  id="address" maxlength="1000" readonly value="@Model.apit.Site.Address1.Trim()  @Model.apit.Site.City.Trim(), @Model.apit.Site.State   @Model.apit.Site.Zip  " />
                        </td>
                </tr>
-                  <tr>
-                       <td>
-                           <label class="control-label  col-md-3 col-xs-3" for="system">System:</label>
-                           <input id="system" class=" col-md-3 col-xs-3" readonly value="@Model.apit.System" />  
+                  <tr >
+                       <td class="form-group">
+                           <label class="col-md-3 col-xs-3" for="system">System:</label>
+                           <input id="system" class=" col-md-3 col-xs-3" readonly value="@Model.apit.SystemCode" />  
                        </td>
-                       <td>
-                           <label class="control-label col-md-3 col-xs-3" for="routecode">Route:</label>
+                       <td class="form-group">
+                           <label class="col-md-3 col-xs-3" for="routecode">Route:</label>
                            <input id="routecode" class="col-md-3 col-xs-3" readonly value="@Model.apit.RouteCode" />
                        </td>
-                       <td>
-                           <label class="control-label col-md-3 col-xs-3" for="quantity">Quantity:</label>
+                       <td class="form-group">
+                           <label class="col-md-3 col-xs-3" for="quantity">Quantity:</label>
                            <input id="quantitiy" class="col-md-3 col-xs-3" readonly value="@Model.apit.System.AlarmAccount" />
                        </td>
                    </tr>
-                   <tr>
+                   @*<tr >
                        <td>
-                           <label class="control-label col-md-3 col-xs-3" for="technician">Technician</label>
-                          <input id="technician" class="col-md-3 col-xs-3" readonly value="@Model.apit.ServiceTechCode" />
+                           <label class="control-label col-md-3 col-xs-3" for="technician">Tech: </label>
+                          <input  id="technician" class="col-md-3 col-xs-3" maxlength="100" readonly value="@Model.apit.ServiceTechCode" />
                            
                        </td>
-                   </tr>
+                   </tr>*@
             </table>
        
           

@@ -3,43 +3,30 @@
 @{
     ViewBag.Title = "Lost";
 }
-<h2>@ViewBag.Title.</h2>
+<h2>@ViewBag.Title</h2>
 <h3>@ViewBag.Message</h3>
 <style type="text/css">
-    /* Change background color of buttons on hover */
-    div.tab button:hover {
-        background-color: #ddd;
-    }
-
-    /* Create an active/current tablink class */
-    div.tab button.active {
-        background-color: #ccc;
-    }
-
-    /* Style the tab content */
-    .tabcontent {
-        display: none;
-        padding: 6px 12px;
-        border: 1px solid #ccc;
-        border-top: none;
+    .inspectdtl {
+        -moz-box-shadow: 0 0 2px black;
+        -webkit-box-shadow: 0 0 2px black;
     }
     </style>
 
 <div class="container">
    
 
-@using (Html.BeginForm("Lost", "Home", FormMethod.Post , new{ APITicketViewModelTicketDetail = Model}))
+@using (Html.BeginForm("Lost", "Home", FormMethod.Post , new{ ticketmodel = Model}))
 
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
     <div>
         @Html.Partial("TicketDetailWithInspection")
-        <div id="inspectiondtl">
+        <div class="inspectdtl">
 
             @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
-            <p>Mark the inspections you want to include in the process</p>
-            <table id="InspectionDtl">
+            <p ><b>Mark the inspections you want to include in the process</b></p>
+            <table id="InspectionDtl" class="inspect">
                 <thead>
                     <tr>
                         <th></th>
@@ -54,16 +41,18 @@
                 @for (var i = 0; i < Model.sysinsp.Count(); i++)
                 {
 
-
+                  
                     <tr>
                         <td>
                            @Html.HiddenFor(m => m.sysinsp[i].inspectionid)
                              @Html.HiddenFor(m => m.sysinsp[i].syscode)
                             @Html.HiddenFor(m => m.sysinsp[i].nextinpdate)
                             @Html.HiddenFor(m => m.sysinsp[i].lastinpdate)
+                            @Html.HiddenFor(m => m.sysinsp[i].customer_system_id)
                             @Html.CheckBoxFor(m => m.sysinsp[i].IsSelected)
                                               
-                            @Html.DisplayFor(m => m.sysinsp[i].inspectionid)
+                            @*@Html.EditorFor(m => m.sysinsp[i].inspectionid)*@
+                            <input type="hidden" name="inspectionid" id="inspectionid" value ="m.sysinsp[i].inspectionid" />
 
                         </td>
                         <td>
@@ -89,25 +78,45 @@
         <br />
         <br />
   
-        <p>inspections</p>
-        @Html.EditorFor(model => model.sysinsp)
-        <p> ticket</p>
-        @Html.EditorFor(model => model.apit)
-        <p>competitor list</p>
-        @Html.EditorFor(model => model.competitorslist)
-      
+       
+       @*editfor here*@
 
-        @*@Html.EditorFor(model => model.IsEnabled);*@
-        @*@Html.HiddenFor(model => model.sysinsp.inspectionid);*@
+
+        @Html.HiddenFor(model => model.apit.CustomerSystemId)
+        @Html.HiddenFor(model => model.apit.InspectionId)
+        @Html.HiddenFor(model => model.apit.ServiceTicketId)
+
 
 
         <label>Select the competitor that we lost the inspection to:</label>
-         @Html.DropDownListFor(m => m.Selectedcompetitor, new SelectList(Model.competitorslist, "Userdef_8_ID", "Userdef_8_Code",0), "Please select a competitor")
-        <p>selected competitor</p>
-        @Html.EditorFor(model => model.Selectedcompetitor);
+         @Html.DropDownListFor(m => m.Selectedcompetitor, new SelectList(Model.competitorslist, "Userdef_8_Code", "Userdef_8_Code",0), "Please select a competitor")
+
+        @*@Html.HiddenFor(model => model.Selectedcompetitor)*@
+        <label id="competitorothertxtlbl" style="display:none" name="competitorothertxtlbl"   for="competitorothertxt"> Enter another competitor </label>
+        <input  id="competitorothertxt" type="text" maxlength="50" name="competitorothertxt" style="display:none" /> 
+       
 
         <input type="submit" value="Submit"/>
     </div>
 }
-
+  
 </div>
+@section Scripts 
+{
+<script type="text/JavaScript">
+      $(document).ready(function () {
+          $('#Selectedcompetitor').change(function (e) {
+          //    alert($('#Selectedcompetitor').val());
+              if ($(this).val() === "Other") {
+                  $('#competitorothertxt').css('display' , 'inline');
+                  $('#competitorothertxtlbl').css('display', 'inline');
+              }
+              else {
+                  $('#competitorothertxt').css('display', 'none');
+                  $('#competitorothertxtlbl').css('display', 'none');
+              }
+          });
+      });
+</script>
+}
+

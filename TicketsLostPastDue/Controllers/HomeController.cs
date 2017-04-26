@@ -42,12 +42,26 @@ namespace TicketsLostPastDue.Controllers
 
 
 
-                //  Ticket ticketnumer = ticketid;
+                //  ViewModelfor the Ticket
                 ViewModelTicketDetail tcktdtl = new Models.ViewModelTicketDetail();
+
+                //Do I need to add the check to make sure inspection record tied to ticket is not on routeid = 1072 and not next inspection date 18991230
                 tcktdtl.apit = Ticket_GetData(tckno.ServiceTcktId);
 
-                tcktdtl.sysinsp = SearchInspection(tcktdtl.apit.CustomerSiteId, tcktdtl.apit.ServiceCompanyID);
-                tcktdtl.competitorslist = GetCompetitors(LostButton, OOBButton, RefusedButton, DoneButton);
+                //the ticket already has an inspection id so after retrieving all inspections for site and service company then take the one out we already have
+               var insplist = SearchInspection(tcktdtl.apit.CustomerSiteId, tcktdtl.apit.ServiceCompanyID).ToList();
+                tcktdtl.sysinsp = (from p in insplist
+                                   where p.inspectionid != tcktdtl.apit.InspectionId
+                                   select p).ToList();
+
+                 //foreach (var sys in tcktdtl.sysinsp)
+                 //{
+                 //    if (sys.inspectionid == tcktdtl.apit.InspectionId)
+                 //    {
+                 //       tc
+                 //    }
+                 //}
+                 tcktdtl.competitorslist = GetCompetitors(LostButton, OOBButton, RefusedButton, DoneButton);
 
 
                 if (!ModelState.IsValid)
@@ -96,46 +110,104 @@ namespace TicketsLostPastDue.Controllers
 
             return View();
         }
+
+
         [HttpPost]
-        public ActionResult Lost(ViewModelTicketDetail tck)
+        public ActionResult Lost(ViewModelTicketDetail ticketmodel)
         {
-            //
-            int cstsystemid = Convert.ToInt32(tck.apit.CustomerSystemId);
-            int cstinspectionid = Convert.ToInt32(tck.apit.InspectionId);
-            bool success = UpdARCustomerSystemUserDef(cstsystemid);
-            
+            //Part 1. Load values from the apit - the ticket that was entered by users
+            int cstsystemid = Convert.ToInt32(ticketmodel.apit.CustomerSystemId);
+            int cstinspectionid = Convert.ToInt32(ticketmodel.apit.InspectionId);
+            string competitorsel = ticketmodel.Selectedcompetitor;
+            string competitorothertxt = ticketmodel.competitorothertxt;
+            int ticketid = ticketmodel.apit.ServiceTicketId;
+            bool success = false;
+            // a) Update the customer system userdef record with "Lost" competitor informatoin 
+            try
+            {
+                success = UpdARCustomerSystemUserDef(cstsystemid, competitorsel, competitorothertxt);
+            }
+            catch
+            {
+                success = false;
+            }
+
+            if (success)
+            {   // b) update the inspection 
+                try
+                {
+                    success = UpdInspection(ticketmodel.apit.InspectionId);
+
+
+                    if (success)
+                    {
+                        //c) update the sv_service_ticket, sv_service_ticket_dispatch , sy_edit_log - update the rest of these table s
+                        //second update the one for the ticket entered
+                        //  success = UpdateServiceTicket(ticketid);
+                        // success = UpdInspection(ticketmodel.apit.InspectionId)
+                        //  }
+                        success = UpdateServiceTicket(ticketid);
+                        //Part 2. check to see if any other checkbox for inspections is true then process them
+
+                        foreach (SearchInspections insp in ticketmodel.sysinsp)
+                        {
+                            if (insp.IsSelected == true)
+                            {
+                                if (ticketmodel.apit.InspectionId != insp.inspectionid)
+                                {
+                                    try
+                                    {
+                                        success = UpdARCustomerSystemUserDef(insp.customer_system_id, competitorsel, competitorothertxt);
+                                        try
+                                        {
+                                            success = UpdInspection(insp.inspectionid);
+                                        }
+                                        catch
+                                        {
+                                            success = false;
+                                        }
+                               
+                                    }
+
+
+
+                                    catch
+                                    {
+                                        success = false;
+                                    }
+                                }
+
+
+                            }
+                            
+                        }
+                    }
+                    else
+                    {
+                        success = false;
+                    }
+                }
+                catch
+                {
+                    success = false;
+                }
+            }
+
             if (success)
             {
-                //first update the one for the ticket entered
-                success = UpdARCustomerSystem(cstsystemid);
-                if (success)
-                    {
-                        success = UpdInspection(tck.apit.InspectionId);
-
-                      }
-                //check to see if any other checkbox for inspections is true
-
-                foreach (SearchInspections t in tck.sysinsp)
-                {
-                    if (t.IsSelected == true)
-                    {
-
-                    }
-
-                }
-                return View("SuccessPage", tck);
+                return View("SuccessPage", ticketmodel);
             }
             else
             {
-                return View("FailedPage", tck);
+                        return View("FailedPage", ticketmodel);
             }
 
         }
-            public ActionResult OOB(APITicket tck)
+        public ActionResult OOB(APITicket tck)
             {
                 return View();
             }
-            private static bool SedAPILogin(bool dmAuthenticate)
+        private static bool SedAPILogin(bool dmAuthenticate)
             {
 
                 string username = ConfigurationManager.AppSettings["lgusrin"];
@@ -178,7 +250,7 @@ namespace TicketsLostPastDue.Controllers
 
                 return dmAuthenticate;
             }
-            private static APITicket Ticket_GetData(int serviceticketid)
+        private static APITicket Ticket_GetData(int serviceticketid)
             {
                 APITicket j = new APITicket();
                 string environment = ConfigurationManager.AppSettings["environment"];
@@ -250,7 +322,7 @@ namespace TicketsLostPastDue.Controllers
                 }
                 return j;
             }
-            private Ticket Ticket_Search(Ticket ticket)
+        private Ticket Ticket_Search(Ticket ticket)
             {
                 //  int SrvTckt = 0;
                 // int inspectionid = 0;
@@ -328,7 +400,7 @@ namespace TicketsLostPastDue.Controllers
                 }
                 return TicketInsp;
             }
-            private static List<SearchInspections> SearchInspection(int siteid, int servcomp)
+        private static List<SearchInspections> SearchInspection(int siteid, int servcomp)
             {
                 // SearchInspections j = new SearchInspections();
                 List<SearchInspections> inspcont = new List<SearchInspections>();
@@ -382,15 +454,8 @@ namespace TicketsLostPastDue.Controllers
                     {
                         var responsedata = reader.ReadToEnd();
                         inspcont = JsonConvert.DeserializeObject<List<SearchInspections>>(responsedata);
-
-
-
-
-                        //   System.Diagnostics.Debug.Write("Ticket Number:  " + j.ToString());
-                        //    System.Diagnostics.Debug.Write("Type Code from Customer: " + j.Customer.TypeCode.ToString());
-                        // System.Diagnostics.Debug.WriteLine( " API ticket" + )
-
-                        System.Diagnostics.Debug.Write(responsedata);
+                    
+                       // System.Diagnostics.Debug.Write(responsedata);
 
 
                     }
@@ -398,7 +463,7 @@ namespace TicketsLostPastDue.Controllers
                 }
                 return inspcont;
             }
-            private static List<Competitors> GetCompetitors(string LostButton, string OOBButton, string RefusedButton, string DoneButton)
+        private static List<Competitors> GetCompetitors(string LostButton, string OOBButton, string RefusedButton, string DoneButton)
             {
 
                 List<Competitors> comp = new List<Competitors>();
@@ -491,22 +556,230 @@ namespace TicketsLostPastDue.Controllers
 
                 return complist;
             }
-            private static bool UpdARCustomerSystemUserDef(int systemid)
+        private static bool UpdARCustomerSystemUserDef(int systemid, string competitortxt,  string competitorothertxt)
             {
                 bool success = false;
+           
+            string environment = ConfigurationManager.AppSettings["environment"];
+
+         
+            string username = ConfigurationManager.AppSettings["lgusrin"];
+            string password = ConfigurationManager.AppSettings["lgusrps"];
+            Byte[] documentBytes;  //holds the post body information in bytes
+
+            //Prepare the request 
+            CredentialCache credentialCache = new CredentialCache();
+           
+            credentialCache.Add(new Uri("https://sedoffapi.silcofs.com"), "Basic", new NetworkCredential(username, password));
+
+
+            string uri;
+
+            uri = "https://sedoffapi.silcofs.com/api/CustomerSystemUserdef/" + systemid;
+
+            
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.AllowAutoRedirect = true;
+            request.PreAuthenticate = true;
+            request.Credentials = credentialCache;
+            request.AutomaticDecompression = DecompressionMethods.GZip;
+            
+
+            request.Method = "PUT";
+            request.ContentType = "application/json";
+
+            //Call store proc for the information for a user 
+            string strPCIInfo = "{\"CustomerSystemId\":" + systemid.ToString() + ",\"Table8Code\": \"" + competitortxt + "\" " + ",\"Text4\" : \"" + competitorothertxt + "\"" + ",\"Date2\" : \"" + DateTime.Today.ToString() +"\"}";
+            // string ticketno;
+
+           
+            System.Text.ASCIIEncoding obj = new System.Text.ASCIIEncoding();
+            documentBytes = obj.GetBytes(strPCIInfo); //convert string to bytes
+            request.ContentLength = documentBytes.Length;
+            //writing the stream
+            using (Stream requestStream = request.GetRequestStream())
+            {
+
+                requestStream.Write(documentBytes, 0, documentBytes.Length);
+                requestStream.Flush();
+                requestStream.Close();
+            }
+
+            //Read the response back after writing the stream
+            try
+            {
+                HttpWebResponse responsemsg = (HttpWebResponse)request.GetResponse();
+                if ((responsemsg.StatusCode == HttpStatusCode.OK) || (responsemsg.StatusCode == HttpStatusCode.NoContent))
+                {
+                    success = true;
+
+                }
+                else
+                {
+                    success = false;
+                }
+            }
+            catch
+            {
+                success = false;
+
+
+            }
+          //  HttpWebResponse responsemsg = (HttpWebResponse)request.GetResponse();
+       
                 return success;
             }
-            private static bool UpdARCustomerSystem(int systemid)
+        private static bool UpdateServiceTicket(int ticketid)
              {
-                   bool success = false;
-                   return success;
-              }
-        private static bool UpdInspection(int systemid)
-        {
-            bool success = false;
+                 bool success = false;
+
+                 string environment = ConfigurationManager.AppSettings["environment"];
+
+
+                string username = ConfigurationManager.AppSettings["lgusrin"];
+                string password = ConfigurationManager.AppSettings["lgusrps"];
+                Byte[] documentBytes;  //holds the post body information in bytes
+
+                 //Prepare the request 
+                CredentialCache credentialCache = new CredentialCache();
+
+                credentialCache.Add(new Uri("https://sedoffapi.silcofs.com"), "Basic", new NetworkCredential(username, password));
+
+
+                string uri;
+
+                uri = "https://sedoffapi.silcofs.com/api/ServiceTicket/" + ticketid;
+
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                 request.AllowAutoRedirect = true;
+                 request.PreAuthenticate = true;
+                 request.Credentials = credentialCache;
+                 request.AutomaticDecompression = DecompressionMethods.GZip;
+
+
+                 request.Method = "PUT";
+                 request.ContentType = "application/json";
+
+                 //Call store proc for the information for a user 
+                 string strPCIInfo = "{\"ServiceTicketId\":" + ticketid + ",\"TicketStatus\": " + "\"CL\"" + ",\"ResolutionCode\": \"Void\"" + ",\"RouteCode\": \"N/A\"" + "}";
+                 // string ticketno;
+
+
+                   System.Text.ASCIIEncoding obj = new System.Text.ASCIIEncoding();
+                 documentBytes = obj.GetBytes(strPCIInfo); //convert string to bytes
+                 request.ContentLength = documentBytes.Length;
+                //writing the stream
+                 using (Stream requestStream = request.GetRequestStream())
+                 {
+
+                    requestStream.Write(documentBytes, 0, documentBytes.Length);
+                    requestStream.Flush();
+                    requestStream.Close();
+                 }
+
+                 //Read the response back after writing the stream
+                 try
+                    {
+                         HttpWebResponse responsemsg = (HttpWebResponse)request.GetResponse();
+                          if ((responsemsg.StatusCode == HttpStatusCode.OK) || (responsemsg.StatusCode == HttpStatusCode.NoContent))
+                             {
+                                 success = true;
+
+                            }
+                          else
+                             {
+                                success = false;
+                              }
+                    }
+                 catch
+                    {
+                                success = false;
+
+
+                    }
+           
+
             return success;
         }
+    
+        private static bool UpdInspection(int inspectionid)
+        {
+            bool success = false;
+          
+
+                string environment = ConfigurationManager.AppSettings["environment"];
+
+
+              //  string username = ConfigurationManager.AppSettings["lgusrin"];
+              //  string password = ConfigurationManager.AppSettings["lgusrps"];
+                Byte[] documentBytes;  //holds the post body information in bytes
+
+                //Prepare the request 
+                CredentialCache credentialCache = new CredentialCache();
+
+             //   credentialCache.Add(new Uri("https://localhost:50249"), "Basic", new NetworkCredential(username, password));
+
+
+                string uri;
+
+             //   uri = "https://sedoffapi.silcofs.com/api/CustomerSystemUserdef/" + systemid;
+                uri = "http://localhost:50249/api/SV_Inspection/" + inspectionid ;
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                request.AllowAutoRedirect = true;
+                request.PreAuthenticate = true;
+                request.Credentials = credentialCache;
+                request.AutomaticDecompression = DecompressionMethods.GZip;
+
+
+                request.Method = "PUT";
+                request.ContentType = "application/json";
+
+                //Call store proc for the information for a user 
+                string strPCIInfo = "{\"Inspection_Id\":" + inspectionid + ",\"Next_Inspection_Date\": \"" + "1899-12-30" + "\"" + ",\"Route_Id\" : " + 1072 + "}";
+                // string ticketno;
+
+
+                System.Text.ASCIIEncoding obj = new System.Text.ASCIIEncoding();
+                documentBytes = obj.GetBytes(strPCIInfo); //convert string to bytes
+                request.ContentLength = documentBytes.Length;
+                //writing the stream
+                using (Stream requestStream = request.GetRequestStream())
+                {
+
+                    requestStream.Write(documentBytes, 0, documentBytes.Length);
+                    requestStream.Flush();
+                    requestStream.Close();
+                }
+
+                //Read the response back after writing the stream
+                try
+                {
+                    HttpWebResponse responsemsg = (HttpWebResponse)request.GetResponse();
+                    if ((responsemsg.StatusCode == HttpStatusCode.OK) || (responsemsg.StatusCode == HttpStatusCode.NoContent))
+                    {
+                        success = true;
+
+                    }
+                    else
+                    {
+                        success = false;
+                    }
+                }
+                catch
+                {
+                    success = false;
+
+
+                }
+                //  HttpWebResponse responsemsg = (HttpWebResponse)request.GetResponse();
+
+                return success;
+        }
+            
+        
     }
-         
 }
+         
     
