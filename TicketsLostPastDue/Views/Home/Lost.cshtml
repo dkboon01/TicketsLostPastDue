@@ -22,6 +22,7 @@
     @Html.ValidationSummary(true)
     <div>
         @Html.Partial("TicketDetailWithInspection")
+        
         <div class="inspectdtl">
 
             @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
@@ -49,6 +50,8 @@
                             @Html.HiddenFor(m => m.sysinsp[i].nextinpdate)
                             @Html.HiddenFor(m => m.sysinsp[i].lastinpdate)
                             @Html.HiddenFor(m => m.sysinsp[i].customer_system_id)
+                            @Html.HiddenFor(m => m.sysinsp[i].inspcycldesc)
+                            
                             @Html.CheckBoxFor(m => m.sysinsp[i].IsSelected)
                                               
                             @*@Html.EditorFor(m => m.sysinsp[i].inspectionid)*@
@@ -85,6 +88,13 @@
         @Html.HiddenFor(model => model.apit.CustomerSystemId)
         @Html.HiddenFor(model => model.apit.InspectionId)
         @Html.HiddenFor(model => model.apit.ServiceTicketId)
+        @Html.HiddenFor(model => model.apit.Site.SiteNumber)
+        @Html.HiddenFor(model => model.apit.Customer.CustomerNumber)
+        @Html.HiddenFor(model => model.apit.SystemCode)
+        @Html.HiddenFor(model => model.tickinspectdesc)
+
+     @*   @Html.HiddenFor(model => model.apit.) *@
+        
 
 
 

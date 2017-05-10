@@ -32,6 +32,9 @@
 </style>
 
 <div class="container">
-    <p>You have successful updated ticket </p> @Model.apit.SystemCode
+    <p>You have successful updated ticket 
+    The inspection has successfully been updated.  </p> 
+    @Html.DisplayFor(m => @Model.apit.TicketNumber)
+    @*@Model.apit.SystemCode*@
     @Html.ActionLink("Continue","Index", "Home")
     </div>

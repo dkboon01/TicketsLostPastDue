@@ -1,91 +1,286 @@
-﻿@*@Model  TicketsLostPastDue.Models.APITicket*@
-  
+﻿@model TicketsLostPastDue.Models.ViewModelTicketDetail
+
 @{
-    ViewBag.Title = "Ticket Details - Done";
+    ViewBag.Title = "Done";
 }
-<h2>@ViewBag.Title.</h2>
+<h2>@ViewBag.Title</h2>
 <h3>@ViewBag.Message</h3>
 <style type="text/css">
-    /* Change background color of buttons on hover */
-    div.tab button:hover {
-        background-color: #ddd;
+    .inspectdtl {
+        -moz-box-shadow: 0 0 2px black;
+        -webkit-box-shadow: 0 0 2px black;
     }
-
-    /* Create an active/current tablink class */
-    div.tab button.active {
-        background-color: #ccc;
-    }
-
-    /* Style the tab content */
-    .tabcontent {
-        display: none;
-        padding: 6px 12px;
-        border: 1px solid #ccc;
-        border-top: none;
-    }
-    </style>
+</style>
 
 <div class="container">
-    @Html.Partial("TicketDetailWithInspection")
 
-@using (Html.BeginForm("Lost", "Home", FormMethod.Post, new { TicketNo = Model }))
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
 
-    @*<fieldset>
-        <div class="editor-label">
+    @using (Html.BeginForm("Done", "Home", FormMethod.Post, new { ticketmodel = Model }))
 
-           <div class="row col-xs-3 col-md-3">
-            <label >Ticket Number:</label>
-               @Model.apit.TicketNumber
-               </div>
-            <div class="row col-xs-3 col-md-3">
-                <label>Site Number:</label>
-                @Model.Site.SiteNumber
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div>
+            @Html.Partial("TicketDetailWithInspection")
+            <div class="invoicedtl">
+
+                @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
+                @*<p><b>Invoices for this site past year </b></p>*@
+                @*<button type="button" id="accordion" class="accordion ui-accordion"><strong>Invoices </strong></button>*@
+                <div id="accordion" class="panel">
+                    <h3>Past Year Invoices</h3>
+
+                    @{
+                        int previousinvoice = 0;
+                    }
+                    @{ if (Model.invs != null)
+                        {
+                              foreach (var t in Model.invs)
+                              {
+                                  if (@t.invoicenumber != previousinvoice)
+                                  {
+
+                                                 <button id="accordion" class="accordion ui-accordion col-md-12 col-xs-12"><strong>@( " Invoice Date: " + @t.InvoiceDate + "   (" + String.Format("{0:C}", @t.TotalInv) + ")  ")  &nbsp; &nbsp;     @("    Dept: " + @t.ServCompany)  &nbsp; &nbsp;  @(" Invoice Desc: " + t.invdesc) </strong></button>
+                                  }
+
+
+                                             <div class="panel">
+                            @*class="panel"*@
+
+                            @if (@t.invoicenumber != previousinvoice)
+                            {
+                                <div class="col-md-12 col-xs-12">
+                                    <br />
+                                    <div class="col-md-3 col-xs-3">
+                                        <label for="invoicenumber">Invoice #:</label>
+                                        @t.invoicenumber
+                                        @*  <input id="invoicenumber" value=@t.invoicenumber readonly /> *@
+                                    </div>
+                                    @*<div class="col-md-4 col-xs-4">
+                                <label for="invdesc">Inv Desc:</label>
+                                @t.invdesc
+                                <input id="invdesc" value=@t.invdesc readonly />
+                            </div>*@
+                                    <div class="col-md-5 col-xs-5">
+
+                                        <label>Tech Name:</label>
+                                        @t.Techname
+
+                                        @* <input type="text" style="width: 400px" id="servcomp"   value=@t.ServCompany readonly /> *@
+                                    </div>
+                                    <br />
+                                </div>
+                            }
+
+                            <div class="col-md012 col-xs-12">
+                                <br />
+
+                                <table class="invtable col-md-12 col-xs-12">
+                                    <thead>
+                                        <tr>
+                                            <th>Part Description </th>
+                                            <th>Quantity </th>
+                                            <th>Unit Price</th>
+                                            <th>Ext Price</th>
+                                        </tr>
+                                    </thead>
+
+                                    @foreach (var dtl in Model.invs)
+                                    {
+                                        if (dtl.invoicenumber == t.invoicenumber)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <div class="col-md-5 col-xs-5">
+                                                        @dtl.partdesc
+                                                    </div>
+                                                </td>
+                                                <td>
+
+                                                    <div class="col-md-2 col-xs-2">
+                                                        @dtl.quantity
+                                                    </div>
+                                                </td>
+                                                <td>
+
+                                                    <div class="col-md-2 col-xs-2">
+                                                        @String.Format("{0:C}", @dtl.UnitPrice)
+                                                    </div>
+                                                </td>
+                                                <td>
+
+                                                    <div class="col-md-3 col-xs-3">
+                                                        @String.Format("{0:C}", @dtl.LineItemExtPrice)
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </table>
+                            </div>
+                            @if (@t.invoicenumber != previousinvoice)
+                            {
+                                <div>
+                                    <br />
+                                    <label class="col-md-2 col-xs-2 control-label" for="memo">Memo</label>
+                                    <div class="col-md-10 col-xs-10">
+                                        @t.memo
+                                        @*<textarea style="max-width:80%" rows="4" id="memo" readonly value="@t.memo"> </textarea>*@
+                                    </div>
+                                </div>
+                                previousinvoice = @t.invoicenumber;
+                            }
+
+                        </div>
+
+                              }
+                            }
+                        }
+
+                </div>
+
+
+
             </div>
-            <div class="row col-xs-3 col-md-3">
-                <label>Customer Number:</label>
-                @Model.CustomerNumber
-                </div>
-            <div class="row col-xs-3 col-md-3">
-                <label>Site Name:</label>
-                @Model.SiteName
-                </div>
-            <div class="row col-xs-3 col-md-3">
-                <label>Address:</label>
-                @Model.Site.Address1.Trim()  @Model.Site.City.Trim() , @Model.Site.State   @Model.Site.Zip
-                </div>
-            <div class="row col-xs-3 col-md-3">
-                <label>System:</label>
-                @Model.System.SystemCode
-                </div>
-            <div class="row col-xs-3 col-md-3">
-                <label>Route:</label>
-                @Model.RouteCode
-                </div>
-            <div class="row col-xs-3 col-md-3">
-                <label>Quantity:</label>
-                @Model.System.AlarmAccount
-                </div>
-                <div class="row col-xs-3 col-md-3">
-                    <label>Technician</label>
-                    @Model.ServiceTechCode
-                </div>
-            <div class="row col-xs-3 col-md-3" style="display: none">
+            <div class="inspectdtl">
+
+                @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
+                <p><b>Mark the inspections you want to include in the process</b></p>
+                <table id="InspectionDtl" class="inspect">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th class="col-md-3 col-xs-3">Cycle</th>
+                            <th class="col-md-3 col-xs-3">System</th>
+                            <th class="col-md-3 col-xs-3">Next Inspection</th>
+                            <th class="col-md-3 col-xs-3">Last Inspection</th>
+                        </tr>
+                    </thead>
+
+
+                    @for (var i = 0; i < Model.sysinsp.Count(); i++)
+                    {
+
+
+                        <tr>
+                            <td>
+                                @Html.HiddenFor(m => m.sysinsp[i].inspectionid)
+                                @Html.HiddenFor(m => m.sysinsp[i].syscode)
+                                @Html.HiddenFor(m => m.sysinsp[i].nextinpdate)
+                                @Html.HiddenFor(m => m.sysinsp[i].lastinpdate)
+                                @Html.HiddenFor(m => m.sysinsp[i].customer_system_id)
+                                @Html.HiddenFor(m => m.sysinsp[i].inspcycldesc)
+
+                                @Html.CheckBoxFor(m => m.sysinsp[i].IsSelected)
+
+                                @*@Html.EditorFor(m => m.sysinsp[i].inspectionid)*@
+                                <input type="hidden" name="inspectionid" id="inspectionid" value="m.sysinsp[i].inspectionid" />
+
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => m.sysinsp[i].inspcycldesc)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => m.sysinsp[i].syscode)
+
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => m.sysinsp[i].nextinpdate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => m.sysinsp[i].lastinpdate)
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+           
+            <br />
+            <br />
+
+
+            @*editfor here*@
+
+
+            @Html.HiddenFor(model => model.apit.CustomerSystemId)
+            @Html.HiddenFor(model => model.apit.InspectionId)
+            @Html.HiddenFor(model => model.apit.ServiceTicketId)
+            @Html.HiddenFor(model => model.apit.Site.SiteNumber)
+            @Html.HiddenFor(model => model.apit.Customer.CustomerNumber)
+            @Html.HiddenFor(model => model.apit.SystemCode)
+            @Html.HiddenFor(model => model.tickinspectdesc)
+            @Html.HiddenFor(model => model.apit.TicketNumber)
+
+            @*   @Html.HiddenFor(model => model.apit.) *@
+
+
+
+
+            @*<label>Select the competitor that we lost the inspection to:</label>*@
+            @*@Html.DropDownListFor(m => m.Selectedcompetitor, new SelectList(Model.competitorslist, "Userdef_8_Code", "Userdef_8_Code", 0))*@
+
+            @*@Html.HiddenFor(model => model.Selectedcompetitor)*@
+            @*<label id="competitorothertxtlbl" name="competitorothertxtlbl" for="competitorothertxt"> Please provide the name of the person who physically turned you away when you stopped out? </label>
+            <input id="competitorothertxt" type="text" maxlength="100" name="competitorothertxt" />*@
+            <label id="lblticknote" name="ticknotelbl"  class = "col-md-12 col-xs-12" for="ticknote"> Add Notes to Ticket:</label>
+            <textarea id="ticknote" style="max-width:80%" type="text"  class = "col-md-12 col-xs-12" rows="3" name="ticknote" ></textarea>
             
-                @Model.CustomerSiteId
+            <div class="col-md-12 col-xs-12">
+                <input type="submit" value="Inactivate Inspection" name="Done" />
+                <input type="submit" value="Keep On Past Due" name="Done"/>
             </div>
-
         </div>
-        <hr />
+    }
 
-
-    </fieldset>*@
-   
-}
-    @*<div class="col-md-12 col-xs-12">
-        @Html.ActionLink("LOST", "LOST", new { APITicket = Model })
-        @Html.ActionLink("OOB", "OOB", new { APITicket = Model })
-    </div>*@
 </div>
+@section Scripts
+{
+    <script type="text/JavaScript">
+      $(document).ready(function () {
+          $('#Selectedcompetitor').change(function (e) {
+          //    alert($('#Selectedcompetitor').val());
+              if ($(this).val() === "Other") {
+                  $('#competitorothertxt').css('display' , 'inline');
+                  $('#competitorothertxtlbl').css('display', 'inline');
+              }
+              else {
+                  $('#competitorothertxt').css('display', 'none');
+                  $('#competitorothertxtlbl').css('display', 'none');
+              }
+          });
+
+          //$(document).ready(function () {
+          //    var acc = document.getElementsByClassName("accordion");
+          //    var i;
+
+          //    for (i = 0; i < acc.length; i++) {
+          //        acc[i].onclick = function () {
+          //            this.classList.toggle("active");
+          //            this.nextElementSibling.classList.toggle("show");
+          //        }
+
+          $(function ()
+          {
+              $("accordion").accordion();
+          })
+
+              
+
+              //$(window).on("navigate", function (event, data) {
+              //    var direction = data.state.direction;
+              //    if (direction == 'back') {
+              //        // do something
+              //    }
+              //    if (direction == 'forward') {
+              //        // do something else
+              //    }
+              //});
+          });
+      });
+    </script>
+}
+
+
+

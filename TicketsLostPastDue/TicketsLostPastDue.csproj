@@ -149,12 +149,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Inspection.cs" />
     <Compile Include="Models\APITicket.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\CustomerBill.cs" />
     <Compile Include="Models\CustomerSite.cs" />
     <Compile Include="Models\Competitor.cs" />
+    <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\SearchInspection.cs" />
+    <Compile Include="Models\SVInspection.cs" />
     <Compile Include="Models\Ticket.cs" />
     <Compile Include="Models\ViewModelTicketDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

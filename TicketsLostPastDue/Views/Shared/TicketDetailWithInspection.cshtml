@@ -60,6 +60,13 @@
                            <input id="quantitiy" class="col-md-3 col-xs-3" readonly value="@Model.apit.System.AlarmAccount" />
                        </td>
                    </tr>
+                   <tr>
+                       <td class="form-group">
+                           <label class="col-md-3 col-xs-3" for="quantity">Last Inspection:</label>
+                           <input id="quantitiy" class="col-md-3 col-xs-3" readonly value="@Model.lastinspectdt" />
+
+                       </td>
+                   </tr>
                    @*<tr >
                        <td>
                            <label class="control-label col-md-3 col-xs-3" for="technician">Tech: </label>
@@ -75,6 +82,11 @@
                 @Model.apit.CustomerSiteId
             
             </div>
+                <div class="row col-xs-4 col-md-4" style="display: none">
+
+                   @* add the inspection first cycle group*@
+
+                </div>
           </div>
             
         </div>
