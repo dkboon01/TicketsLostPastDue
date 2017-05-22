@@ -13,7 +13,8 @@ namespace TicketsLostPastDue.Models
         public int ServiceTicketId { get; set; }
         public string TicketStatus { get; set; }
         public string TicketStatusName { get; set; }
-        [Display(Name = "Ticket Number")]
+        [Required]
+        [DisplayName("Ticket Number")]
         public string TicketNumber { get; set; }
         public int CustomerId { get; set; }
         public string CustomerNumber { get; set; }

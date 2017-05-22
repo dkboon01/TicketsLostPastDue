@@ -63,7 +63,10 @@
                    <tr>
                        <td class="form-group">
                            <label class="col-md-3 col-xs-3" for="quantity">Last Inspection:</label>
-                           <input id="quantitiy" class="col-md-3 col-xs-3" readonly value="@Model.lastinspectdt" />
+                           @*<input id="quantitiy" class="col-md-3 col-xs-3" readonly value="@Model.lastinspectdt" />*@
+                           @Html.TextBoxFor(model => model.lastinspectdt)
+                          @*"{0:MM/dd/yyyy}")*@
+                           @*@Html.TextBox("lastinspectdt")*@
 
                        </td>
                    </tr>

@@ -30,7 +30,7 @@
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
 </div>*@
-<h3>Enter a Ticket Number then press the Action button</h3>
+<p>Enter a Ticket Number then press the Action button</p>
 <div class="row">
   @using (Html.BeginForm("FindTicket", "Home", FormMethod.Post, new { TicketNo = Model }))
   {
@@ -39,17 +39,19 @@
 
         <fieldset>
             <div class="editor-label">
-                @Html.LabelFor(model => model.TicketNumber)
+                @Html.LabelFor(model => model.TicketNumber,"Ticket Number")
                 @Html.ValidationMessage("Unsuccessful", "*")
             </div>
             <div class="editor-label">
                 @Html.TextBoxFor(model => model.TicketNumber)
 
             </div>
-            <input type="submit" name="LostButton" value="Lost" />
-            <input type="submit" name="OOBButton" value="OOB" />
-            <input type="submit" name="RefusedButton" value="Refused" />
-            <input type="submit" name="DoneButton" value="Done" />
+            <div style="margin-top: 50px">
+                 <input type="submit" name="LostButton" value="Lost" />
+                 <input type="submit" name="OOBButton" value="OOB" />
+                    <input type="submit" name="RefusedButton" value="Refused" />
+                  <input type="submit" name="DoneButton" value="Done" />
+            </div>
         </fieldset>
     }
     

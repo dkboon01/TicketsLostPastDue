@@ -1,8 +1,27 @@
 ﻿@model TicketsLostPastDue.Models.ViewModelTicketDetail
 
 @{
-    ViewBag.Title = "Done";
+    ViewBag.Title = "Process Past Due as Done";
 }
+<head>		ViewModelTicketDetail	error CS0103: The name 'ViewModelTicketDetail' does not exist in the current context
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    @*<link href="~/Content/themes/base/accordion.css" rel="stylesheet" />*@
+    @*<link rel="stylesheet" href="/resources/demos/style.css">*@
+    @*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>*@
+    <script>
+        //$(function () {
+        //    $("#accordion").accordion({
+        //        collapsible: true
+        //    });
+            
+        //});
+    </script>
+</head>
 <h2>@ViewBag.Title</h2>
 <h3>@ViewBag.Message</h3>
 <style type="text/css">
@@ -27,122 +46,94 @@
                 @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
                 @*<p><b>Invoices for this site past year </b></p>*@
                 @*<button type="button" id="accordion" class="accordion ui-accordion"><strong>Invoices </strong></button>*@
-                <div id="accordion" class="panel">
-                    <h3>Past Year Invoices</h3>
-
+                <label>Past Year Invoice</label>
+                <div id="accordion"  class="panel">
+                    @*<h3> bel</h3>
+                    <div> hello</div>
+                    <h3>force</h3>
+                    <div>hello</div>*@
+                     
                     @{
-                        int previousinvoice = 0;
-                    }
-                    @{ if (Model.invs != null)
+                        if (Model.hdrinv != null)
                         {
-                              foreach (var t in Model.invs)
-                              {
-                                  if (@t.invoicenumber != previousinvoice)
-                                  {
-
-                                                 <button id="accordion" class="accordion ui-accordion col-md-12 col-xs-12"><strong>@( " Invoice Date: " + @t.InvoiceDate + "   (" + String.Format("{0:C}", @t.TotalInv) + ")  ")  &nbsp; &nbsp;     @("    Dept: " + @t.ServCompany)  &nbsp; &nbsp;  @(" Invoice Desc: " + t.invdesc) </strong></button>
-                                  }
-
-
-                                             <div class="panel">
-                            @*class="panel"*@
-
-                            @if (@t.invoicenumber != previousinvoice)
+                            foreach (var t in Model.hdrinv)
                             {
-                                <div class="col-md-12 col-xs-12">
-                                    <br />
-                                    <div class="col-md-3 col-xs-3">
-                                        <label for="invoicenumber">Invoice #:</label>
-                                        @t.invoicenumber
-                                        @*  <input id="invoicenumber" value=@t.invoicenumber readonly /> *@
-                                    </div>
-                                    @*<div class="col-md-4 col-xs-4">
-                                <label for="invdesc">Inv Desc:</label>
-                                @t.invdesc
-                                <input id="invdesc" value=@t.invdesc readonly />
-                            </div>*@
-                                    <div class="col-md-5 col-xs-5">
+  
+                                  <h3>
+                                       @*<label class=" ui-accordion col-md-12 col-xs-12">*@
+                                      <strong>@( " Invoice Date: " + @t.InvoiceDate  )   &nbsp; &nbsp;  @("    Dept: " + @t.ServCompany)  &nbsp; &nbsp;  @(" Invoice Desc: " + t.invdesc) &nbsp; &nbsp; @(" Tech name: " + @t.InvoiceNumber) &nbsp; &nbsp; @(" Invoice#: " + @t.InvoiceNumber) </strong>
+                                      @*</label>*@
+                                      @*<label class=" ui-accordion col-md-12 col-xs-12"for="invoicenumber">Invoice #:</label> @t.InvoiceNumber
+                                      <label class=" ui-accordion col-md-12 col-xs-12">Tech Name:</label>  @t.Techname*@ 
+                                  </h3>
+                               
 
-                                        <label>Tech Name:</label>
-                                        @t.Techname
+                                   <div>
+                                         @*<label for="invoicenumber">Invoice #:</label> @t.InvoiceNumber
+                                         <label>Tech Name:</label>  @t.Techname*@
+                                         
+                                              <table class="invtable col-md-12 col-xs-12">
+                                                
+                                                   <thead>
+                                                         <tr>
+                                                            <th>Part Description </th>
+                                                             <th>Quantity </th>
+                                                             <th>Unit Price</th>
+                                                              <th>Ext Price</th>
+                                                         </tr>
+                                                   </thead>
+                                                 
+                                                  @foreach (var m in Model.invs)
+                                                  {
+                                                                  if (@m.invoicenumber == @t.InvoiceNumber)
+                                                                  {
+                                                                     <tr>
+                                                                       <td>
+                                                                            <div class="col-md-5 col-xs-5">
+                                                                              @m.partdesc
+                                                                             </div>
+                                                                      </td>
+                                                                       <td>
 
-                                        @* <input type="text" style="width: 400px" id="servcomp"   value=@t.ServCompany readonly /> *@
-                                    </div>
-                                    <br />
-                                </div>
+                                                                           <div class="col-md-2 col-xs-2">
+                                                                           @m.quantity
+                                                                            </div>
+                                                                       </td>
+                                                                         <td>
+
+                                                                                <div class="col-md-2 col-xs-2">
+                                                                               @String.Format("{0:C}", @m.UnitPrice)
+                                                                               </div>
+                                                                          </td>
+                                                                          <td>
+
+                                                                              <div class="col-md-3 col-xs-3">
+                                                                                 @String.Format("{0:C}", @m.LineItemExtPrice)
+                                                                              </div>
+                                                                           </td>
+                                                                   </tr>
+
+                                                                  }
+                                                  }
+
+
+                                               </table>
+                                             
+                                   </div>
+                       
+                                  
+                               
                             }
-
-                            <div class="col-md012 col-xs-12">
-                                <br />
-
-                                <table class="invtable col-md-12 col-xs-12">
-                                    <thead>
-                                        <tr>
-                                            <th>Part Description </th>
-                                            <th>Quantity </th>
-                                            <th>Unit Price</th>
-                                            <th>Ext Price</th>
-                                        </tr>
-                                    </thead>
-
-                                    @foreach (var dtl in Model.invs)
-                                    {
-                                        if (dtl.invoicenumber == t.invoicenumber)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    <div class="col-md-5 col-xs-5">
-                                                        @dtl.partdesc
-                                                    </div>
-                                                </td>
-                                                <td>
-
-                                                    <div class="col-md-2 col-xs-2">
-                                                        @dtl.quantity
-                                                    </div>
-                                                </td>
-                                                <td>
-
-                                                    <div class="col-md-2 col-xs-2">
-                                                        @String.Format("{0:C}", @dtl.UnitPrice)
-                                                    </div>
-                                                </td>
-                                                <td>
-
-                                                    <div class="col-md-3 col-xs-3">
-                                                        @String.Format("{0:C}", @dtl.LineItemExtPrice)
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                </table>
-                            </div>
-                            @if (@t.invoicenumber != previousinvoice)
-                            {
-                                <div>
-                                    <br />
-                                    <label class="col-md-2 col-xs-2 control-label" for="memo">Memo</label>
-                                    <div class="col-md-10 col-xs-10">
-                                        @t.memo
-                                        @*<textarea style="max-width:80%" rows="4" id="memo" readonly value="@t.memo"> </textarea>*@
-                                    </div>
-                                </div>
-                                previousinvoice = @t.invoicenumber;
-                            }
-
-                        </div>
-
-                              }
-                            }
+                        
                         }
-
+                    }
                 </div>
 
 
 
             </div>
-            <div class="inspectdtl">
+           
+            <div class="inspectdtl panel" style="margin-top: 50px">
 
                 @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
                 <p><b>Mark the inspections you want to include in the process</b></p>
@@ -197,10 +188,6 @@
 
             </div>
            
-            <br />
-            <br />
-
-
             @*editfor here*@
 
 
@@ -225,9 +212,9 @@
             @*<label id="competitorothertxtlbl" name="competitorothertxtlbl" for="competitorothertxt"> Please provide the name of the person who physically turned you away when you stopped out? </label>
             <input id="competitorothertxt" type="text" maxlength="100" name="competitorothertxt" />*@
             <label id="lblticknote" name="ticknotelbl"  class = "col-md-12 col-xs-12" for="ticknote"> Add Notes to Ticket:</label>
-            <textarea id="ticknote" style="max-width:80%" type="text"  class = "col-md-12 col-xs-12" rows="3" name="ticknote" ></textarea>
+            <textarea id="ticknote" style="max-width:80%" type="text"  class = "col-md-12 col-xs-12" rows="3" name="ticknote" required ></textarea>
             
-            <div class="col-md-12 col-xs-12">
+            <div class="col-md-12 col-xs-12" style="margin-top:50px">
                 <input type="submit" value="Inactivate Inspection" name="Done" />
                 <input type="submit" value="Keep On Past Due" name="Done"/>
             </div>
@@ -235,10 +222,13 @@
     }
 
 </div>
-@section Scripts
-{
-    <script type="text/JavaScript">
-      $(document).ready(function () {
+
+    <script>
+        $(document).ready(function () {
+            $('#accordion').accordion({ collapsible: true, active: 'none' });
+        });
+        $(document).ready(function () {
+         
           $('#Selectedcompetitor').change(function (e) {
           //    alert($('#Selectedcompetitor').val());
               if ($(this).val() === "Other") {
@@ -250,7 +240,9 @@
                   $('#competitorothertxtlbl').css('display', 'none');
               }
           });
-
+  //        $(function () {
+         
+   //       });
           //$(document).ready(function () {
           //    var acc = document.getElementsByClassName("accordion");
           //    var i;
@@ -261,10 +253,9 @@
           //            this.nextElementSibling.classList.toggle("show");
           //        }
 
-          $(function ()
-          {
-              $("accordion").accordion();
-          })
+         
+  
+         
 
               
 
@@ -278,9 +269,9 @@
               //    }
               //});
           });
-      });
+     
     </script>
-}
+
 
 
 

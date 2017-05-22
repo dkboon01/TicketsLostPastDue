@@ -1,17 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using System.Configuration;
-using System.Net;
 using System.IO;
-using Newtonsoft.Json.Linq;
-using SedonaServices.Models;
-using Newtonsoft.Json;
+using System.Linq;
+using System.Net;
+using System.Web.Mvc;
 using TicketsLostPastDue.Models;
-using System.Text;
-using System.Net.Http;
 //using System.Net.Http.WebRequests;
 
 namespace TicketsLostPastDue.Controllers
@@ -54,6 +49,33 @@ namespace TicketsLostPastDue.Controllers
                 SVInspection insp = GetInspection(tcktdtl.apit.InspectionId);
                 if (!(insp.Route_Id.Equals(1072)) && !(insp.Next_Inspection_Date == "1899-12-30T00:00:00"))
                 {
+                    if (DoneButton != null)  //only the Done Page shows invoice history
+                    {
+                        tcktdtl.invs = GetInvoices(tcktdtl.apit.CustomerSiteId, tcktdtl.apit.CustomerId).ToList();
+                        // List<HdrInvoice> hdrinv = new List<HdrInvoice>
+
+                        tcktdtl.hdrinv = (from hdr in tcktdtl.invs
+                                          group hdr by new { hdr.invoicenumber, hdr.InvoiceDate, hdr.Customer_Id, hdr.Customer_Site_Id, hdr.invdesc, hdr.memo, hdr.ServCompany, hdr.Techname } into orderGroup
+                                          select new HdrInvoice()
+                                          {
+                                              InvoiceNumber = orderGroup.Key.invoicenumber,
+                                              InvoiceDate = orderGroup.Key.InvoiceDate,
+                                              Customer_Id = orderGroup.Key.Customer_Id,
+                                              Customer_Site_Id = orderGroup.Key.Customer_Site_Id,
+                                              invdesc = orderGroup.Key.invdesc,
+                                              memo = orderGroup.Key.memo,
+                                              ServCompany = orderGroup.Key.ServCompany,
+                                              Techname = orderGroup.Key.Techname
+
+                                          }).ToList();
+
+   
+                        //    InvoiceDate = orderGroup.InvoiceDate,
+                        //   
+
+                    }
+                        
+                    
                     tcktdtl.lastinspectdt = insp.Last_Inspection_Date;
                     //This can be taken out once the Sedona API has the Sv_inspection table added 
                     switch (insp.Inspection_Cycle_Id)
@@ -148,13 +170,7 @@ namespace TicketsLostPastDue.Controllers
             }
         }
 
-        //public ActionResult Contact()
-        //{
-        //    ViewBag.Message = "Your contact page.";
-
-        //    return View();
-        //}
-
+       
 
         [HttpPost]
         public ActionResult Lost(ViewModelTicketDetail ticketmodel)
@@ -1425,96 +1441,59 @@ namespace TicketsLostPastDue.Controllers
             }
             return success;
         }
-        //private static List<Competitors> GetCompetitorsforOOB(string LostButton, string OOBButton, string RefusedButton, string DoneButton)
-        //{
+        private static List<Invoice> GetInvoices(int siteid, int customerid)
+        {
+           
+              List<Invoice> inv = new List<Invoice>();
+                string environment = ConfigurationManager.AppSettings["environment"];
 
-        //    List<Competitors> comp = new List<Competitors>();
-        //    List<Competitors> complist = new List<Competitors>();
-        //    string environment = ConfigurationManager.AppSettings["environment"];
+                Byte[] documentBytes;  //holds the post body information in bytes
 
-        //    //  bool success = false;
-        //    //   string username = ConfigurationManager.AppSettings["lgusrin"];
-        //    // string password = ConfigurationManager.AppSettings["lgusrps"];
-        //    Byte[] documentBytes;  //holds the post body information in bytes
-
-        //    //Prepare the request 
-        //    CredentialCache credentialCache = new CredentialCache();
-        //    //// if (environment == "P")
-        //    // {
-        //    //  credentialCache.Add(new Uri("http://localhost:50249"), "Basic", new NetworkCredential(username, password));
-
-
-        //    string uri;
-
-        //    //  uri = "https://sedoffapi.silcofs.com/api/ServiceTicket/" + serviceticketid;
-        //    uri = "http://localhost:50249/api/AR_Userdef_8";
+                //Prepare the request 
+                CredentialCache credentialCache = new CredentialCache();
+                
+             string   uri = "http://localhost:50249/api/Invoice?siteid=" + siteid + "&customerid=" + customerid;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                request.AllowAutoRedirect = true;
+                request.PreAuthenticate = true;
+                request.Credentials = credentialCache;
+                request.AutomaticDecompression = DecompressionMethods.GZip;
 
 
-        //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-        //    request.AllowAutoRedirect = true;
-        //    request.PreAuthenticate = true;
-        //    request.Credentials = credentialCache;
-        //    request.AutomaticDecompression = DecompressionMethods.GZip;
+                request.Method = "GET";
+                request.ContentType = "application/json";
 
-        //    request.Method = "GET";
-        //    request.ContentType = "text/json";
-
-        //    //Call store proc for the information for a user 
-        //    string strPCIInfo = "";
-        //    // string ticketno;
-
-        //    System.Text.ASCIIEncoding obj = new System.Text.ASCIIEncoding();
-        //    documentBytes = obj.GetBytes(strPCIInfo); //convert string to bytes
-        //    request.ContentLength = documentBytes.Length;
+               
+                string body = "";
 
 
-        //    HttpWebResponse responsemsg = (HttpWebResponse)request.GetResponse();
-        //    if (responsemsg.StatusCode == HttpStatusCode.OK)
-        //    {
-        //        // success = true;
+                System.Text.ASCIIEncoding obj = new System.Text.ASCIIEncoding();
+                documentBytes = obj.GetBytes(body); //convert string to bytes
+                request.ContentLength = documentBytes.Length;
+                
+                    HttpWebResponse responsemsg = (HttpWebResponse)request.GetResponse();
+                    if ((responsemsg.StatusCode == HttpStatusCode.OK) )
+                     { 
+                            using (StreamReader reader = new StreamReader(responsemsg.GetResponseStream()))
+                                     {
+                                            var responsedata = reader.ReadToEnd();
+                                            inv = JsonConvert.DeserializeObject<List<Invoice>>(responsedata);  ///Here is the problem on retrive inspection *********************
 
+                                     }
 
-        //        using (StreamReader reader = new StreamReader(responsemsg.GetResponseStream()))
-        //        {
-        //            var responsedata = reader.ReadToEnd();
-        //            comp = JsonConvert.DeserializeObject<List<Competitors>>(responsedata);
-        //            var compl = comp.ToList();
-        //            foreach (var c in comp)
-        //            {
-        //                if (LostButton != null)   //Lost Button  - competitor list does not neeed OOB or Refused 
-        //                {
-        //                    if (!c.Description.Contains("N/A") && !c.Description.Contains("OOB") && !c.Description.Contains("Refused") && !c.Inactive.Contains("Y"))
-        //                    {
-        //                        complist.Add(c);
-        //                    }
-        //                }
+                    }
+                    else
+                    {
 
-        //                else
-        //                    if (OOBButton != null)
-        //                {
-        //                    if (c.Description.Contains("OOB"))  // only show the OOB not confirmed
-        //                    {
-        //                        complist.Add(c);
-        //                    }
-        //                }
-        //                else
-        //                        if (RefusedButton != null)  // only show Refused  d 
-        //                {
-        //                    if (c.Description.Contains("OOB"))
-        //                    {
-        //                        complist.Add(c);
-        //                    }
-        //                }
+                              ;
+                        
+                    }
+         
 
-        //                //  System.Diagnostics.Debug.Write(responsedata);
+            return inv;
+        }
 
-        //            }
-        //        }
-
-        //    }
-
-        //    return complist;
-        //}
+      
     }
 }
          

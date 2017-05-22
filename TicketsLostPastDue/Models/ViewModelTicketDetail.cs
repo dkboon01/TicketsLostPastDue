@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -15,8 +16,10 @@ namespace TicketsLostPastDue.Models
         public string Selectedcompetitor { get; set; }
         public string competitorothertxt { get; set; }
         public string tickinspectdesc { get; set; }
+  
         public string lastinspectdt { get; set; }
         public string ticknote { get; set; }
+        public List<HdrInvoice> hdrinv { get; set; }
         public List<Invoice> invs { get; set; }
         //public bool[] Selected { get; set; }
         // public string SelectedDescription { get; set; }
