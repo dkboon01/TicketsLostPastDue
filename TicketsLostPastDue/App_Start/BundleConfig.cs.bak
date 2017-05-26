@@ -29,23 +29,14 @@ namespace TicketsLostPastDue
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
-            bundles.Add(new StyleBundle("~/Content/CSS").Include(
+            bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
-
-            "~/Content/themes/base/jquery.ui.core.css",
-              "~/Content/themes/base/jquery.ui.resizable.css",
-              "~/Content/themes/base/jquery.ui.selectable.css",
-              "~/Content/themes/base/jquery.ui.accordion.css",
-              "~/Content/themes/base/jquery.ui.autocomplete.css",
-        
-              "~/Content/themes/base/jquery.ui.theme.css",
-         
-              "~/Content/tether/tether.min.css"
-
-  ));
-            
+                "~/Content/themes/base/jquery.ui.core.css",
+                "~/Content/themes/base/jquery.ui.accordion.css"
+                ));
+            //    C:\Users\dboone\documents\visual studio 2017\Projects\TicketsLostPastDue\TicketsLostPastDue\Content\themes\base\jquery-ui.css
         }
     }
 }

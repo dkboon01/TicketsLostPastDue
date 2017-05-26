@@ -18,6 +18,7 @@ namespace TicketsLostPastDue.Models
         public string tickinspectdesc { get; set; }
   
         public string lastinspectdt { get; set; }
+        [Required(ErrorMessage ="A Note is Required for this Ticket")]
         public string ticknote { get; set; }
         public List<HdrInvoice> hdrinv { get; set; }
         public List<Invoice> invs { get; set; }

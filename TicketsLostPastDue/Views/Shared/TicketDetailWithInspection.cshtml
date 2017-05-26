@@ -4,7 +4,8 @@
     .ticketdtl {
         -moz-box-shadow: 0 0 2px black;
         -webkit-box-shadow: 0 0 2px black;
-    } 
+    }
+    
 </style>
 <h4>Ticket Detail and Additional Inspections</h4>
 <div class="ticketdtl">
@@ -60,23 +61,16 @@
                            <input id="quantitiy" class="col-md-3 col-xs-3" readonly value="@Model.apit.System.AlarmAccount" />
                        </td>
                    </tr>
-                   <tr>
+                   <tr style="padding-top: 10px">
                        <td class="form-group">
-                           <label class="col-md-3 col-xs-3" for="quantity">Last Inspection:</label>
-                           @*<input id="quantitiy" class="col-md-3 col-xs-3" readonly value="@Model.lastinspectdt" />*@
-                           @Html.TextBoxFor(model => model.lastinspectdt)
-                          @*"{0:MM/dd/yyyy}")*@
-                           @*@Html.TextBox("lastinspectdt")*@
+                           <label class="col-md-3 col-xs-3" for="lastinspectdt">Last Inspection:</label>
+                           <input id="lastinspectdt" class="col-md-4 col-xs-4" readonly value="
+                               @Convert.ToDateTime(Model.lastinspectdt).ToString("MM/dd/yyyy")" />
+                         
 
                        </td>
                    </tr>
-                   @*<tr >
-                       <td>
-                           <label class="control-label col-md-3 col-xs-3" for="technician">Tech: </label>
-                          <input  id="technician" class="col-md-3 col-xs-3" maxlength="100" readonly value="@Model.apit.ServiceTechCode" />
-                           
-                       </td>
-                   </tr>*@
+                  
             </table>
        
           
