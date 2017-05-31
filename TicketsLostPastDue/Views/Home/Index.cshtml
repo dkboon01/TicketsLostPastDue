@@ -5,7 +5,7 @@
 
 
 <p>Enter a Ticket Number then press the Action button</p>
-<div class="row">
+@*<div class="row">*@
   @using (Html.BeginForm("FindTicket", "Home", FormMethod.Post, new { TicketNo = Model }))
   {
         @Html.AntiForgeryToken()
@@ -23,23 +23,10 @@
             <div style="margin-top: 50px">
                  <input type="submit" name="LostButton" value="Lost" />
                  <input type="submit" name="OOBButton" value="OOB" />
-                    <input type="submit" name="RefusedButton" value="Refused" />
+                 <input type="submit" name="RefusedButton" value="Refused" />
                   <input type="submit" name="DoneButton" value="Done" />
             </div>
         </fieldset>
     }
     
-  @*  @using (Html.BeginForm("Details", "YourControllerName"))
-    {
-        <input type="hidden" name="EmployeeId" value="@item.EmployeeId" />
-        <input type="submit" value="Details" />
-    } 
-    @*<form id="sbmti
-            </fieldset>
-        }
-        @*<form id="sbmticket">
-        <label for="ticketid"></label>
-        <input type="text" id="ticketid" />
-            <button id="btnsubmit" type="submit" </button>
-            </form>*@
-</div>
+  

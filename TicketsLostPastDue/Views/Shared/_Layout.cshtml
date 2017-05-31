@@ -22,6 +22,14 @@
     div.navbar.navbar-inverse.navbar-fixed-top {
         background-color: #001489;
     }
+    .footer {
+        
+        position: absolute;
+        bottom: 0;
+      
+        height: 60px;
+    
+    }
 </style>
   
 </head>
@@ -50,13 +58,12 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
+   
     
     </div>
     <div class="container">
-         <footer class="footer navbar-fixed-bottom"> 
-        
-            @*//  <p >&copy; @DateTime.Now.Year - Silco Fire and Security</p >*@
+        <footer class="footer">
+       
             <p style="background-color: lightgray">
                 <strong> Silco Fire & Security</strong><br />
                 Confidential: The information contained in this website and other internal websites and computer systems is confidential information belonging to Silco Fire & Security. <br />

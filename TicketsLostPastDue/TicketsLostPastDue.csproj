@@ -222,6 +222,7 @@
     <Compile Include="Models\HdrInvoice.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\SearchInspection.cs" />
+    <Compile Include="Models\SuccessFailViewModel.cs" />
     <Compile Include="Models\SVInspection.cs" />
     <Compile Include="Models\Ticket.cs" />
     <Compile Include="Models\ViewModelTicketDetail.cs" />
@@ -345,8 +346,8 @@
     <Content Include="Views\Home\Lost.cshtml" />
     <Content Include="Views\Home\Done.cshtml" />
     <Content Include="Views\Shared\TicketDetailWithInspection.cshtml" />
-    <Content Include="Views\Home\SuccessPage.cshtml" />
-    <Content Include="Views\Home\FailedPage.cshtml" />
+    <Content Include="Views\Home\Success.cshtml" />
+    <Content Include="Views\Home\Failed.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />

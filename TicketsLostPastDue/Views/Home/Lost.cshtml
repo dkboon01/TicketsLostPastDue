@@ -1,7 +1,7 @@
 ﻿@model TicketsLostPastDue.Models.ViewModelTicketDetail
 
 @{
-    ViewBag.Title = "Lost";
+    ViewBag.Title = "The Inspection is Lost";
 }
 <h2>@ViewBag.Title</h2>
 <h3>@ViewBag.Message</h3>
@@ -43,8 +43,8 @@
                 {
 
                   
-                    <tr>
-                        <td>
+                    <tr >
+                        <td >
                            @Html.HiddenFor(m => m.sysinsp[i].inspectionid)
                              @Html.HiddenFor(m => m.sysinsp[i].syscode)
                             @Html.HiddenFor(m => m.sysinsp[i].nextinpdate)
@@ -58,17 +58,17 @@
                             <input type="hidden" name="inspectionid" id="inspectionid" value ="m.sysinsp[i].inspectionid" />
 
                         </td>
-                        <td>
+                        <td class="col-md-3 col-xs-3">
                             @Html.DisplayFor(m => m.sysinsp[i].inspcycldesc)
                         </td>
-                        <td>
+                        <td class="col-md-3 col-xs-3">
                             @Html.DisplayFor(m => m.sysinsp[i].syscode)
                         
                         </td>
-                        <td>
+                        <td class="col-md-3 col-xs-3">
                             @Html.DisplayFor(m => m.sysinsp[i].nextinpdate)
                         </td>
-                         <td>
+                         <td class="col-md-3 col-xs-3">
                               @Html.DisplayFor(m => m.sysinsp[i].lastinpdate)
                          </td>
                     </tr>
@@ -102,11 +102,14 @@
          @Html.DropDownListFor(m => m.Selectedcompetitor, new SelectList(Model.competitorslist, "Userdef_8_Code", "Userdef_8_Code",0), "Please select a competitor")
 
         @*@Html.HiddenFor(model => model.Selectedcompetitor)*@
-        <label id="competitorothertxtlbl" style="display:none" name="competitorothertxtlbl"   for="competitorothertxt"> Enter another competitor </label>
-        <input  id="competitorothertxt" type="text" maxlength="50" name="competitorothertxt" style="display:none" /> 
-       
+        <div>
+            <label id="competitorothertxtlbl" style="display:none" name="competitorothertxtlbl" for="competitorothertxt"> Enter another competitor </label>
 
-        <input type="submit" value="Submit"/>
+            <input id="competitorothertxt" type="text" maxlength="50" name="competitorothertxt" style="display:none" />
+        </div>
+        <div>
+               <input type="submit" value="Submit"/>
+        </div>
     </div>
 }
   

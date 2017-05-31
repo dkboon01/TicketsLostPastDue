@@ -1,7 +1,7 @@
 ﻿@model TicketsLostPastDue.Models.ViewModelTicketDetail
 
 @{
-    ViewBag.Title = "OOB";
+    ViewBag.Title = "The Site is Out of Business(OOB)";
 }
 <h2>@ViewBag.Title</h2>
 <h3>@ViewBag.Message</h3>
@@ -58,17 +58,17 @@
                                 <input type="hidden" name="inspectionid" id="inspectionid" value="m.sysinsp[i].inspectionid" />
 
                             </td>
-                            <td>
+                            <td class="col-md-3 col-xs-3">
                                 @Html.DisplayFor(m => m.sysinsp[i].inspcycldesc)
                             </td>
-                            <td>
+                            <td class="col-md-3 col-xs-3">
                                 @Html.DisplayFor(m => m.sysinsp[i].syscode)
 
                             </td>
-                            <td>
+                            <td class="col-md-3 col-xs-3">
                                 @Html.DisplayFor(m => m.sysinsp[i].nextinpdate)
                             </td>
-                            <td>
+                            <td class="col-md-3 col-xs-3">
                                 @Html.DisplayFor(m => m.sysinsp[i].lastinpdate)
                             </td>
                         </tr>
@@ -105,8 +105,9 @@
             <label id="competitorothertxtlbl" style="display:none" name="competitorothertxtlbl" for="competitorothertxt"> Enter another competitor </label>
             <input id="competitorothertxt" type="text" maxlength="50" name="competitorothertxt" style="display:none" />
 
-
-            <input type="submit" value="Submit" />
+            <div>
+                <input type="submit" value="Submit" />
+            </div>
         </div>
     }
 

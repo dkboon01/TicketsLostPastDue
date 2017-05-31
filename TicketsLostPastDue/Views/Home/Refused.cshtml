@@ -1,7 +1,7 @@
 ﻿@model TicketsLostPastDue.Models.ViewModelTicketDetail
 
 @{
-    ViewBag.Title = "Refused";
+    ViewBag.Title = "The Inspection is Refused";
 }
 <h2>@ViewBag.Title</h2>
 <h3>@ViewBag.Message</h3>
@@ -58,17 +58,17 @@
                                 <input type="hidden" name="inspectionid" id="inspectionid" value="m.sysinsp[i].inspectionid" />
 
                             </td>
-                            <td>
+                            <td class="col-md-3 col-xs-3">
                                 @Html.DisplayFor(m => m.sysinsp[i].inspcycldesc)
                             </td>
-                            <td>
+                            <td class="col-md-3 col-xs-3">
                                 @Html.DisplayFor(m => m.sysinsp[i].syscode)
 
                             </td>
-                            <td>
+                            <td class="col-md-3 col-xs-3">
                                 @Html.DisplayFor(m => m.sysinsp[i].nextinpdate)
                             </td>
-                            <td>
+                            <td class="col-md-3 col-xs-3">
                                 @Html.DisplayFor(m => m.sysinsp[i].lastinpdate)
                             </td>
                         </tr>

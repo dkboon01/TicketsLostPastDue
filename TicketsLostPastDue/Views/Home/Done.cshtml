@@ -35,23 +35,17 @@
 
 
     @using (Html.BeginForm("Done", "Home", FormMethod.Post, new { ticketmodel = Model }))
-
-    {
+{
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
-        <div>
+      
             @Html.Partial("TicketDetailWithInspection")
             <div class="invoicedtl">
 
-                @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
-                @*<p><b>Invoices for this site past year </b></p>*@
-                @*<button type="button" id="accordion" class="accordion ui-accordion"><strong>Invoices </strong></button>*@
+          
                 <label>Past Year Invoice</label>
                 <div id="accordion"  class="panel">
-                    @*<h3> bel</h3>
-                    <div> hello</div>
-                    <h3>force</h3>
-                    <div>hello</div>*@
+                  
                      
                     @{
                         if (Model.hdrinv != null)
@@ -60,17 +54,13 @@
                             {
   
                                   <h3>
-                                       @*<label class=" ui-accordion col-md-12 col-xs-12">*@
+                                    
                                       <strong>@( " Invoice Date: " + @t.InvoiceDate  )   &nbsp; &nbsp;  @("    Dept: " + @t.ServCompany)  &nbsp; &nbsp;  @(" Invoice Desc: " + t.invdesc) &nbsp; &nbsp; @(" Tech name: " + @t.InvoiceNumber) &nbsp; &nbsp; @(" Invoice#: " + @t.InvoiceNumber) </strong>
-                                      @*</label>*@
-                                      @*<label class=" ui-accordion col-md-12 col-xs-12"for="invoicenumber">Invoice #:</label> @t.InvoiceNumber
-                                      <label class=" ui-accordion col-md-12 col-xs-12">Tech Name:</label>  @t.Techname*@ 
+                                
                                   </h3>
                                
 
                                    <div>
-                                         @*<label for="invoicenumber">Invoice #:</label> @t.InvoiceNumber
-                                         <label>Tech Name:</label>  @t.Techname*@
                                          
                                               <table class="invtable col-md-12 col-xs-12">
                                                 
@@ -135,7 +125,7 @@
            
             <div class="inspectdtl panel" style="margin-top: 50px">
 
-                @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
+         
                 <p><b>Mark the inspections you want to include in the process</b></p>
                 <table id="InspectionDtl" class="inspect">
                     <thead>
@@ -168,17 +158,17 @@
                                 <input type="hidden" name="inspectionid" id="inspectionid" value="m.sysinsp[i].inspectionid" />
 
                             </td>
-                            <td>
+                            <td class="col-md-3 col-xs-3">
                                 @Html.DisplayFor(m => m.sysinsp[i].inspcycldesc)
                             </td>
-                            <td>
+                            <td class="col-md-3 col-xs-3">
                                 @Html.DisplayFor(m => m.sysinsp[i].syscode)
 
                             </td>
-                            <td>
+                            <td class="col-md-3 col-xs-3">
                                 @Html.DisplayFor(m => m.sysinsp[i].nextinpdate)
                             </td>
-                            <td>
+                            <td class="col-md-3 col-xs-3">
                                 @Html.DisplayFor(m => m.sysinsp[i].lastinpdate)
                             </td>
                         </tr>
@@ -188,7 +178,7 @@
 
             </div>
            
-            @*editfor here*@
+     
 
 
             @Html.HiddenFor(model => model.apit.CustomerSystemId)
@@ -200,25 +190,17 @@
             @Html.HiddenFor(model => model.tickinspectdesc)
             @Html.HiddenFor(model => model.apit.TicketNumber)
 
-            @*   @Html.HiddenFor(model => model.apit.) *@
-
-
-
-
-            @*<label>Select the competitor that we lost the inspection to:</label>*@
-            @*@Html.DropDownListFor(m => m.Selectedcompetitor, new SelectList(Model.competitorslist, "Userdef_8_Code", "Userdef_8_Code", 0))*@
-
-            @*@Html.HiddenFor(model => model.Selectedcompetitor)*@
-            @*<label id="competitorothertxtlbl" name="competitorothertxtlbl" for="competitorothertxt"> Please provide the name of the person who physically turned you away when you stopped out? </label>
-            <input id="competitorothertxt" type="text" maxlength="100" name="competitorothertxt" />*@
-            <label id="lblticknote" name="ticknotelbl"  class = "col-md-12 col-xs-12" for="ticknote"> Add Notes to Ticket:</label>
-            <textarea id="ticknote" style="max-width:80%" type="text"  class = "col-md-12 col-xs-12" rows="3" name="ticknote" required ></textarea>
-            
-            <div class="col-md-12 col-xs-12" style="margin-top:50px">
+            <div>
+                <label id="lblticknote" name="ticknotelbl" for="ticknote"> Add Notes to Ticket:</label>
+           </div>
+           <div >
+                   <textarea class="col-md-12 col-xs-12" id="ticknote" style="max-width:80%" type="text" rows="3" name="ticknote" required ></textarea>
+            </div>
+            <div  style="margin-top:75px; margin-bottom: 25px;">
                 <input type="submit" value="Inactivate Inspection" name="Done" />
                 <input type="submit" value="Keep On Past Due" name="Done"/>
             </div>
-        </div>
+        
     }
 
 </div>

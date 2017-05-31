@@ -1,13 +1,12 @@
-﻿@model TicketsLostPastDue.Models.ViewModelTicketDetail
+﻿@model TicketsLostPastDue.Models.SuccessFailViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
-
 @{
-    ViewBag.Title = "Successful";
+    ViewBag.Title = "Failed";
 }
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
@@ -32,9 +31,7 @@
 </style>
 
 <div class="container">
-    <p>You have successful updated ticket 
-    The inspection has successfully been updated.  </p> 
-    @Html.DisplayFor(m => @Model.apit.TicketNumber)
-    @*@Model.apit.SystemCode*@
-    @Html.ActionLink("Continue","Index", "Home")
+    <div>
+        <p>The ticket @Model.TicketNumber has failed to process correctly. Please logoff . </p>
+    </div>
     </div>
