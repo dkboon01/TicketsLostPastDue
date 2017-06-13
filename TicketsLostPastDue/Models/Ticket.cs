@@ -15,5 +15,6 @@ namespace TicketsLostPastDue.Models
         [Range( 2, 999999999, ErrorMessage = "Ticket must be created from Inspection")]
         public int InspectionId { get; set; }
         public int ServiceTcktId { get; set; }
+        public DateTime ScheduleForStartDate { get; set; }
     }
 }

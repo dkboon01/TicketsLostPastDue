@@ -73,6 +73,7 @@ namespace TicketsLostPastDue.Controllers
         {
 
             //    ActionResult result = View("LogOn");
+            System.Web.HttpContext.Current.Session["ProcessPastDue"] = 0;
             ActionResult result = View("Login");
             UserInfo user = _userRepository.Authenticate(model.UserName, model.Password);
 
@@ -94,7 +95,7 @@ namespace TicketsLostPastDue.Controllers
                         System.Web.HttpContext.Current.Session["E-mail"] = _userRepository.HasEmail(model.UserName, model.Password);
                         System.Web.HttpContext.Current.Session["displayname"] = _userRepository.HasDisplayName(model.UserName, model.Password);
                         System.Web.HttpContext.Current.Session["title"] = _userRepository.HasTitle(model.UserName, model.Password);
-                        System.Web.HttpContext.Current.Session["appid"] = 5;
+                        System.Web.HttpContext.Current.Session["appid"] = 12;
 
                         var seclist = TicketsLostPastDue.Models.Helper.FindSecurity<FindSecurityPastDue_Result>(Convert.ToInt32(System.Web.HttpContext.Current.Session["appid"]), System.Web.HttpContext.Current.Session["title"].ToString(), System.Web.HttpContext.Current.Session["department"].ToString(), " ").ToList();
 

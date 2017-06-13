@@ -10,12 +10,20 @@
         -moz-box-shadow: 0 0 2px black;
         -webkit-box-shadow: 0 0 2px black;
     }
+    #competitorothertxt
+    {
+        display: none;
+    }
+    span.field-validation-error{
+        background: red;
+        color: black;
+    }
     </style>
 
 <div class="container">
    
 
-@using (Html.BeginForm("Lost", "Home", FormMethod.Post , new{ ticketmodel = Model}))
+@using (Html.BeginForm("Lost", "Home", FormMethod.Post, new { ticketmodel = Model, onsubmit = "validate()" }))
 
 {
     @Html.AntiForgeryToken()
@@ -26,56 +34,69 @@
         <div class="inspectdtl">
 
             @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
-            <p ><b>Mark the inspections you want to include in the process</b></p>
-            <table id="InspectionDtl" class="inspect">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th class="col-md-3 col-xs-3">Cycle</th>
-                        <th class="col-md-3 col-xs-3">System</th>
-                        <th class="col-md-3 col-xs-3">Next Inspection</th>
-                        <th class="col-md-3 col-xs-3">Last Inspection</th>
-                    </tr>
-                </thead>
+            <p ><b>Mark any other inspections that you want to include in the process</b></p>
+           
+
+                @{
+                    if (!Model.sysinsp.Any())
+                    {
+                        <p>No Additional Inspections found for this Service Company</p>
+                    }
+                    else
+                    {
+                        <table id="InspectionDtl" class="inspect">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th class="col-md-3 col-xs-3">Cycle</th>
+                                    <th class="col-md-3 col-xs-3">System</th>
+                                    <th class="col-md-3 col-xs-3">Next Inspection</th>
+                                    <th class="col-md-3 col-xs-3">Last Inspection</th>
+                                </tr>
+                            </thead>
+                            @if (Model.sysinsp != null)
+                            {
+
+                            for (var i = 0; i < Model.sysinsp.Count(); i++)
+                            {
 
 
-                @for (var i = 0; i < Model.sysinsp.Count(); i++)
-                {
+                                     <tr>
+                                <td>
+                                    @Html.HiddenFor(m => m.sysinsp[i].inspectionid)
+                                    @Html.HiddenFor(m => m.sysinsp[i].syscode)
+                                    @Html.HiddenFor(m => m.sysinsp[i].nextinpdate)
+                                    @Html.HiddenFor(m => m.sysinsp[i].lastinpdate)
+                                    @Html.HiddenFor(m => m.sysinsp[i].customer_system_id)
+                                    @Html.HiddenFor(m => m.sysinsp[i].inspcycldesc)
 
-                  
-                    <tr >
-                        <td >
-                           @Html.HiddenFor(m => m.sysinsp[i].inspectionid)
-                             @Html.HiddenFor(m => m.sysinsp[i].syscode)
-                            @Html.HiddenFor(m => m.sysinsp[i].nextinpdate)
-                            @Html.HiddenFor(m => m.sysinsp[i].lastinpdate)
-                            @Html.HiddenFor(m => m.sysinsp[i].customer_system_id)
-                            @Html.HiddenFor(m => m.sysinsp[i].inspcycldesc)
+                                    @Html.CheckBoxFor(m => m.sysinsp[i].IsSelected)
+
+                                    @*@Html.EditorFor(m => m.sysinsp[i].inspectionid)*@
+                                    <input type="hidden" name="inspectionid" id="inspectionid" value="m.sysinsp[i].inspectionid" />
+
+                                </td>
+                                <td class="col-md-3 col-xs-3">
+                                    @Html.DisplayFor(m => m.sysinsp[i].inspcycldesc)
+                                </td>
+                                <td class="col-md-3 col-xs-3">
+                                    @Html.DisplayFor(m => m.sysinsp[i].syscode)
+
+                                </td>
+                                <td class="col-md-3 col-xs-3">
+                                    @Html.DisplayFor(m => m.sysinsp[i].nextinpdate)
+                                </td>
+                                <td class="col-md-3 col-xs-3">
+                                    @Html.DisplayFor(m => m.sysinsp[i].lastinpdate)
+                                </td>
+                            </tr>
+                            }
+                            }
                             
-                            @Html.CheckBoxFor(m => m.sysinsp[i].IsSelected)
-                                              
-                            @*@Html.EditorFor(m => m.sysinsp[i].inspectionid)*@
-                            <input type="hidden" name="inspectionid" id="inspectionid" value ="m.sysinsp[i].inspectionid" />
 
-                        </td>
-                        <td class="col-md-3 col-xs-3">
-                            @Html.DisplayFor(m => m.sysinsp[i].inspcycldesc)
-                        </td>
-                        <td class="col-md-3 col-xs-3">
-                            @Html.DisplayFor(m => m.sysinsp[i].syscode)
-                        
-                        </td>
-                        <td class="col-md-3 col-xs-3">
-                            @Html.DisplayFor(m => m.sysinsp[i].nextinpdate)
-                        </td>
-                         <td class="col-md-3 col-xs-3">
-                              @Html.DisplayFor(m => m.sysinsp[i].lastinpdate)
-                         </td>
-                    </tr>
-                }
-
-            </table>
-
+                        </table>
+                        }
+                    }
         </div>
 
         <br />
@@ -92,6 +113,11 @@
         @Html.HiddenFor(model => model.apit.Customer.CustomerNumber)
         @Html.HiddenFor(model => model.apit.SystemCode)
         @Html.HiddenFor(model => model.tickinspectdesc)
+        @Html.HiddenFor(model => model.apit.TicketNumber)
+        @Html.HiddenFor(model => model.apit.Site.Address1)
+        @Html.HiddenFor(model => model.apit.Site.State)
+        @Html.HiddenFor(model => model.apit.Site.City)
+        @Html.HiddenFor(model => model.apit.Site.Zip)
 
      @*   @Html.HiddenFor(model => model.apit.) *@
         
@@ -100,15 +126,22 @@
 
         <label>Select the competitor that we lost the inspection to:</label>
          @Html.DropDownListFor(m => m.Selectedcompetitor, new SelectList(Model.competitorslist, "Userdef_8_Code", "Userdef_8_Code",0), "Please select a competitor")
-
+        
+        @Html.ValidationMessageFor(m => m.Selectedcompetitor)
         @*@Html.HiddenFor(model => model.Selectedcompetitor)*@
         <div>
+            @*<label class="col-md-3 col-xs-3 control-label" for="sitenumber">Site:</label>
+            <div class=" col-md-3 col-xs-3">
+                <input id="sitenumber" readonly value="@Model.apit.Site.SiteNumber" />
+            </div>*@
             <label id="competitorothertxtlbl" style="display:none" name="competitorothertxtlbl" for="competitorothertxt"> Enter another competitor </label>
+            @Html.TextBoxFor(m => m.competitorothertxt)
 
-            <input id="competitorothertxt" type="text" maxlength="50" name="competitorothertxt" style="display:none" />
+           @* <input id="competitorothertxt" type="text" maxlength="50" name="competitorothertxt" style="display:none" /> *@
+            @Html.ValidationMessageFor(m => m.competitorothertxt)
         </div>
         <div>
-               <input type="submit" value="Submit"/>
+               <input type="submit" value="Submit" />
         </div>
     </div>
 }
@@ -129,7 +162,18 @@
                   $('#competitorothertxtlbl').css('display', 'none');
               }
           });
-      });
+        
+    });
+    function validate() {
+        if ($('#competitorothertxt').is(':visible')) {
+            if ($('#competitorothertext').val() == "") {
+                alert('Other Competitor must be fille in')
+
+            }
+
+        }
+
+    }
 </script>
 }
 

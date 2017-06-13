@@ -10,6 +10,10 @@
         -moz-box-shadow: 0 0 2px black;
         -webkit-box-shadow: 0 0 2px black;
     }
+    span.field-validation-error {
+        background: red;
+        color: black;
+    }
 </style>
 
 <div class="container">
@@ -26,7 +30,14 @@
             <div class="inspectdtl">
 
                 @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
-                <p><b>Mark the inspections you want to include in the process</b></p>
+                <p><b>Mark any other inspections that you want to include in the process.</b></p>
+@{
+    if (!Model.sysinsp.Any())
+    {
+        <p>No Additional Inspections found for this Service Company</p>
+    }
+    else
+    {
                 <table id="InspectionDtl" class="inspect">
                     <thead>
                         <tr>
@@ -75,7 +86,8 @@
                     }
 
                 </table>
-
+        }
+    }
             </div>
 
             <br />
@@ -92,6 +104,7 @@
             @Html.HiddenFor(model => model.apit.Customer.CustomerNumber)
             @Html.HiddenFor(model => model.apit.SystemCode)
             @Html.HiddenFor(model => model.tickinspectdesc)
+            @Html.HiddenFor(model => model.apit.TicketNumber)
 
             @*   @Html.HiddenFor(model => model.apit.) *@
 
@@ -103,8 +116,11 @@
 
             @*@Html.HiddenFor(model => model.Selectedcompetitor)*@
             <label id="competitorothertxtlbl"  name="competitorothertxtlbl" for="competitorothertxt"> Please provide the name of the person who physically turned you away when you stopped out? </label>
-            <input id="competitorothertxt" type="text" maxlength="100" name="competitorothertxt" />
+            @*<input id="competitorothertxt" type="text" maxlength="100" name="competitorothertxt" />*@
+            @Html.TextBoxFor(m => m.competitorothertxt)
 
+            @* <input id="competitorothertxt" type="text" maxlength="50" name="competitorothertxt" style="display:none" /> *@
+            @Html.ValidationMessageFor(m => m.competitorothertxt)
             <div>
                  <input type="submit" value="Submit" />
             </div>

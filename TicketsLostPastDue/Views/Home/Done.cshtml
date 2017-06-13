@@ -25,9 +25,71 @@
 <h2>@ViewBag.Title</h2>
 <h3>@ViewBag.Message</h3>
 <style type="text/css">
+    span.field-validation-error {
+        background: red;
+        color: black;
+    }
     .inspectdtl {
         -moz-box-shadow: 0 0 2px black;
         -webkit-box-shadow: 0 0 2px black;
+        display: none;
+    }
+    .ui-accordion .ui-accordion-header {
+        cursor: pointer;
+        position: relative;
+        margin-top: 1px;
+        zoom: 1;
+    }
+
+    .ui-accordion .ui-accordion-li-fix {
+        display: inline;
+    }
+
+    .ui-accordion .ui-accordion-header-active {
+        border-bottom: 0 !important;
+    }
+
+    .ui-accordion .ui-accordion-header a {
+        display: block;
+        font-size: 1em;
+        padding: .5em .5em .5em .7em;
+    }
+    /* IE7-/Win - Fix extra vertical space in lists */
+    .ui-accordion a {
+        zoom: 1;
+    }
+
+    .ui-accordion-icons .ui-accordion-header a {
+        padding-left: 2.2em;
+    }
+
+    .ui-accordion .ui-accordion-header .ui-icon {
+        position: absolute;
+        left: .5em;
+        top: 50%;
+        margin-top: -8px;
+    }
+
+    .ui-accordion .ui-accordion-content {
+        padding: 1em 2.2em;
+        border-top: 0;
+        margin-top: -2px;
+        position: relative;
+        top: 1px;
+        margin-bottom: 2px;
+        overflow: auto;
+        display: none;
+        zoom: 1;
+    }
+
+    .ui-accordion .ui-accordion-content-active {
+        display: block;
+    }
+    .footer {
+        position: relative;
+        bottom: 0;
+        /*width: 100%;*/
+        height: 5px;
     }
 </style>
 
@@ -43,19 +105,23 @@
             <div class="invoicedtl">
 
           
-                <label>Past Year Invoice</label>
+                <label>Past Year Invoices</label>
                 <div id="accordion"  class="panel">
                   
                      
-                    @{
+                    @{  if(!Model.hdrinv.Any())
+                        {
+                            <div class="col-md-12 col-xs-12"> <p>There are no Invoices</p></div>
+                            
+                        }
                         if (Model.hdrinv != null)
                         {
                             foreach (var t in Model.hdrinv)
                             {
-  
+
                                   <h3>
                                     
-                                      <strong>@( " Invoice Date: " + @t.InvoiceDate  )   &nbsp; &nbsp;  @("    Dept: " + @t.ServCompany)  &nbsp; &nbsp;  @(" Invoice Desc: " + t.invdesc) &nbsp; &nbsp; @(" Tech name: " + @t.InvoiceNumber) &nbsp; &nbsp; @(" Invoice#: " + @t.InvoiceNumber) </strong>
+                                      <strong>@( " Invoice Date: " + @t.InvoiceDate  )   &nbsp; &nbsp;  @("    Dept: " + @t.ServCompany)  &nbsp; &nbsp;  @(" Invoice Desc: " + t.invdesc) &nbsp; &nbsp; @(" Tech name: " + @t.Techname) &nbsp; &nbsp; @(" Invoice#: " + @t.InvoiceNumber) </strong>
                                 
                                   </h3>
                                
@@ -123,8 +189,8 @@
 
             </div>
            
-            <div class="inspectdtl panel" style="margin-top: 50px">
-
+            <div class="inspectdtl panel" style="margin-top: 50px";>
+                @*Hiding inspections that would be listed because customer service will manually fix the records*@
          
                 <p><b>Mark the inspections you want to include in the process</b></p>
                 <table id="InspectionDtl" class="inspect">
@@ -196,9 +262,14 @@
            <div >
                    <textarea class="col-md-12 col-xs-12" id="ticknote" style="max-width:80%" type="text" rows="3" name="ticknote" required ></textarea>
             </div>
+            @Html.ValidationMessageFor(m => m.ticknote)
             <div  style="margin-top:75px; margin-bottom: 25px;">
-                <input type="submit" value="Inactivate Inspection" name="Done" />
-                <input type="submit" value="Keep On Past Due" name="Done"/>
+                @*<div>
+                  <input type="submit" value="Inactivate Inspection" name="Done" />
+                </div>*@
+                <div style="padding-top: 20px">
+                    <input type="submit" value="Keep On Past Due" name="Done" />
+                </div>
             </div>
         
     }

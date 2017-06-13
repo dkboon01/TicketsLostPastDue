@@ -50,7 +50,7 @@
                                    <input id="sitenumber" readonly value="@Model.apit.Site.SiteNumber" />
                                </div>
                                
-                                    <label class=" col-md-3 col-xs-3" for="sitename">Business Name:</label>
+                                    <label class=" col-md-3 col-xs-3" for="sitename">Customer Name:</label>
                               <div class="col-md-3 col-xs-3">
                                <input class="" id="sitename" readonly value="@Model.apit.SiteName" />
                                </div>
@@ -87,7 +87,7 @@
                    
                    <div class="form-group" >
                        <div class="row">
-                          
+
                            <label class="col-md-3 col-xs-3" for="tickinspectdesc">Type:</label>
                            <div class="col-md-3 col-xs-3">
                                <input id="tickinspectdesc" class="" readonly value="@Model.tickinspectdesc" />
@@ -97,25 +97,34 @@
                                <input id="lastinspectdt" readonly value="
                                @Convert.ToDateTime(Model.lastinspectdt).ToString("MM/dd/yyyy")" />
                            </div>
-
-                      
+                           </div>
                    </div>
-                  
-            </div>
-       
-          
-            <div class="row col-xs-4 col-md-4" style="display: none">
+                   <div class="form-group">
+                        <div class="row">
+                                   <label class="col-md-3 col-xs-3" for="lastinspectdt">Scheduled For:</label>
+                                   <div class="col-md-3 col-xs-3">
+                                       <input id="lastinspectdt" readonly value="
+                                       @Convert.ToDateTime(Model.apit.ScheduledFor).ToString("MM/dd/yyyy")" />
+                                   </div>
 
-                @Model.apit.CustomerSiteId
-            
-            </div>
-               
-          </div>
+
+                         </div>
+
+                   </div>
+
+
+                           <div class="row col-xs-4 col-md-4" style="display: none">
+
+                               @Model.apit.CustomerSiteId
+
+                           </div>
+
+                       </div>
             
       
     </div>
 
 
-    
+    </div>
 
 

@@ -26,7 +26,14 @@
             <div class="inspectdtl">
 
                 @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
-                <p><b>Mark the inspections you want to include in the process</b></p>
+                <p><b>Mark any other inspections that you want to include in the process</b></p>
+@{
+    if (!Model.sysinsp.Any())
+    {
+        <p>No Additional Inspections found for this Service Company</p>
+    }
+    else
+    {
                 <table id="InspectionDtl" class="inspect">
                     <thead>
                         <tr>
@@ -75,7 +82,8 @@
                     }
 
                 </table>
-
+        }
+    }
             </div>
 
             <br />
@@ -92,6 +100,7 @@
             @Html.HiddenFor(model => model.apit.Customer.CustomerNumber)
             @Html.HiddenFor(model => model.apit.SystemCode)
             @Html.HiddenFor(model => model.tickinspectdesc)
+            @Html.HiddenFor(model => model.apit.TicketNumber)
 
             @*   @Html.HiddenFor(model => model.apit.) *@
 

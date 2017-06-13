@@ -13,7 +13,9 @@ namespace TicketsLostPastDue.Models
         public List<SearchInspections> sysinsp {get; set;}
         public List<Competitors> competitorslist { get; set;  }
      //   public SelectList competitor { get; set; }
+        [Required(ErrorMessage= "Competitor is Required")]
         public string Selectedcompetitor { get; set; }
+        [Required(ErrorMessage ="Field must be filled in")]
         public string competitorothertxt { get; set; }
         public string tickinspectdesc { get; set; }
   
