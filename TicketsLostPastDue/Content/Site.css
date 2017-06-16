@@ -55,11 +55,11 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
-ul li{
+/*ul li{
     background-color: red;
     color: black;
 }
 div.validation-summary-errors ul li {
     color: black;
     background-color: red;
-}
+}*/
