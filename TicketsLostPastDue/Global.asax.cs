@@ -19,5 +19,10 @@ namespace TicketsLostPastDue
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+        protected void Application_Error()
+        {
+           // Exception unhandledException = Server.GetLastError();
+
+        }
     }
 }

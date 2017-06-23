@@ -31,7 +31,7 @@ namespace TicketsLostPastDue.Controllers
         public ActionResult FindTicket(Ticket TicketNo
             , string LostButton, string OOBButton, string RefusedButton, string DoneButton)
         {
-            System.Diagnostics.Debug.WriteLine("Ticket number keyed in " + TicketNo.ToString());
+          //  System.Diagnostics.Debug.WriteLine("Ticket number keyed in " + TicketNo.ToString());
 
         //    SedAPILogin(true);
             // Ticket_GetData(159384);
@@ -558,13 +558,21 @@ namespace TicketsLostPastDue.Controllers
                 case "Keep On Past Due":
                     //Add the save to the ticket notes here 
                     bool success = InsertTicketNotes(ticketmodel.apit.TicketNumber, ticketmodel.ticknote);
+                  
                     SuccessFailViewModel sf = new SuccessFailViewModel();
                     sf.TicketNumber = ticketmodel.apit.TicketNumber;
                     if (success)
                     {
-                       // return View("Index");
-                        return View("Success", sf);
-                        
+                        // return View("Index");
+                        success = InsertServiceTicketUserDef(ticketmodel.apit.TicketNumber, "N");
+                        if (success)
+                        {
+                            return View("Success", sf);
+                        }
+                        else
+                        {
+                            return View("Failed", sf);
+                        }
                     }
                     else
                     {
@@ -681,6 +689,40 @@ namespace TicketsLostPastDue.Controllers
                     else
                     {
                         return View("Failed", sfb);
+                    }
+                case "Submit for Approval":
+                    success = InsertTicketNotes(ticketmodel.apit.TicketNumber, ticketmodel.ticknote);
+                    
+
+                    SuccessFailViewModel sfa = new SuccessFailViewModel();
+                    sfa.TicketNumber = ticketmodel.apit.TicketNumber;
+                    if (success)
+                    {
+                        try
+                        {
+                             success = InsertServiceTicketUserDef(ticketmodel.apit.TicketNumber, "Y");
+                            if (success)
+                            {
+                                return View("Success", sfa);
+                            }
+                            else
+                            {
+                                return View("Failure", sfa);
+                            }
+                        }
+                        catch(Exception ex)
+                        {
+                            sfa.error = ex.ToString();
+                            return View("Failed", sfa);
+                        }
+                       
+
+                    }
+                    else
+                    {
+                        //return View();
+                        return View("Failed", sfa);
+
                     }
                 default:
                     {
@@ -1405,8 +1447,79 @@ namespace TicketsLostPastDue.Controllers
 
                 return inv;
             }
- 
 
+        private static bool InsertServiceTicketUserDef(string TicketNumber, string inreviewflag)   ///Stopped Here  adding  a method to post a note to the ticket
+        {
+            bool success = false;
+
+
+            string environment = ConfigurationManager.AppSettings["environment"];
+
+
+            Byte[] documentBytes;  //holds the post body information in bytes
+
+            //Prepare the request 
+            CredentialCache credentialCache = new CredentialCache();
+
+
+            string userloggedin = System.Web.HttpContext.Current.Session["sessionLoginName"].ToString();
+
+            string uri = "http://localhost:50249/api/SV_TicketUserDef/";
+            //   string uri = "https://silcosedonacustomapi.silcofs.com/api/SV_TicketUserDef/";
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            string authInfo = ConfigurationManager.AppSettings["apilgusrin"] + ":" + ConfigurationManager.AppSettings["apilgusrps"];
+            authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
+            request.Headers["Authorization"] = "Basic " + authInfo;
+            request.AllowAutoRedirect = true;
+            request.PreAuthenticate = true;
+            request.Credentials = credentialCache;
+            request.AutomaticDecompression = DecompressionMethods.GZip;
+
+
+            request.Method = "POST";
+            request.ContentType = "application/json";
+
+            //Call store proc for the information for a user 
+            string body = "{\"ticketnumber\":" + TicketNumber + ",\"inreviewflag\": \"" + inreviewflag + "\"" + "}";
+            // string ticketno;
+
+
+            System.Text.ASCIIEncoding obj = new System.Text.ASCIIEncoding();
+            documentBytes = obj.GetBytes(body); //convert string to bytes
+            request.ContentLength = documentBytes.Length;
+            //writing the stream
+            using (Stream requestStream = request.GetRequestStream())
+            {
+
+                requestStream.Write(documentBytes, 0, documentBytes.Length);
+                requestStream.Flush();
+                requestStream.Close();
+            }
+
+            //Read the response back after writing the stream
+            try
+            {
+                HttpWebResponse responsemsg = (HttpWebResponse)request.GetResponse();
+                if ((responsemsg.StatusCode == HttpStatusCode.OK) || (responsemsg.StatusCode == HttpStatusCode.Created))
+                {
+                    success = true;
+
+                }
+                else
+                {
+                    success = false;
+                }
+            }
+            catch
+            {
+                success = false;
+
+
+            }
+            //  HttpWebResponse responsemsg = (HttpWebResponse)request.GetResponse();
+
+            return success;
+        }
 
 
 

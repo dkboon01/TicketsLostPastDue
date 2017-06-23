@@ -100,7 +100,7 @@
 {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
-      
+
             @Html.Partial("TicketDetailWithInspection")
             <div class="invoicedtl">
 
@@ -109,10 +109,10 @@
                 <div id="accordion"  class="panel">
                   
                      
-                    @{  if(!Model.hdrinv.Any())
+                    @{  if (!Model.hdrinv.Any())
                         {
                             <div class="col-md-12 col-xs-12"> <p>There are no Invoices</p></div>
-                            
+
                         }
                         if (Model.hdrinv != null)
                         {
@@ -124,7 +124,7 @@
                                       <strong>@( " Invoice Date: " + @t.InvoiceDate  )   &nbsp; &nbsp;  @("    Dept: " + @t.ServCompany)  &nbsp; &nbsp;  @(" Invoice Desc: " + t.invdesc) &nbsp; &nbsp; @(" Tech name: " + @t.Techname) &nbsp; &nbsp; @(" Invoice#: " + @t.InvoiceNumber) </strong>
                                 
                                   </h3>
-                               
+
 
                                    <div>
                                          
@@ -141,8 +141,8 @@
                                                  
                                                   @foreach (var m in Model.invs)
                                                   {
-                                                                  if (@m.invoicenumber == @t.InvoiceNumber)
-                                                                  {
+                                                      if (@m.invoicenumber == @t.InvoiceNumber)
+                                                      {
                                                                      <tr>
                                                                        <td>
                                                                             <div class="col-md-5 col-xs-5">
@@ -169,18 +169,18 @@
                                                                            </td>
                                                                    </tr>
 
-                                                                  }
+                                                      }
                                                   }
 
 
                                                </table>
                                              
                                    </div>
-                       
-                                  
-                               
+
+
+
                             }
-                        
+
                         }
                     }
                 </div>
@@ -188,7 +188,7 @@
 
 
             </div>
-           
+
             <div class="inspectdtl panel" style="margin-top: 50px";>
                 @*Hiding inspections that would be listed because customer service will manually fix the records*@
          
@@ -243,8 +243,8 @@
                 </table>
 
             </div>
-           
-     
+
+
 
 
             @Html.HiddenFor(model => model.apit.CustomerSystemId)
@@ -268,10 +268,16 @@
                   <input type="submit" value="Inactivate Inspection" name="Done" />
                 </div>*@
                 <div style="padding-top: 20px">
-                    <input type="submit" value="Keep On Past Due" name="Done" />
+                    @if (@HttpContext.Current.Session["title"].ToString() == "Technician")
+                    {
+                        <input type="submit" value="Submit for Approval" name="Done" />
+                    }
+                    else { 
+                    <input type = "submit" value = "Keep On Past Due" name = "Done" />
+                            }
                 </div>
             </div>
-        
+
     }
 
 </div>
