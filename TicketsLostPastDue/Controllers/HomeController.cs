@@ -1464,8 +1464,8 @@ namespace TicketsLostPastDue.Controllers
 
             string userloggedin = System.Web.HttpContext.Current.Session["sessionLoginName"].ToString();
 
-            string uri = "http://localhost:50249/api/SV_TicketUserDef/";
-            //   string uri = "https://silcosedonacustomapi.silcofs.com/api/SV_TicketUserDef/";
+          //  string uri = "http://localhost:50249/api/SV_TicketUserDef/";
+             string uri = "https://silcosedonacustomapi.silcofs.com/api/SV_TicketUserDef/";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
             string authInfo = ConfigurationManager.AppSettings["apilgusrin"] + ":" + ConfigurationManager.AppSettings["apilgusrps"];
             authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
